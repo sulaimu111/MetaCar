@@ -1,0 +1,205 @@
+body {
+  margin: 0%;
+  /* padding: 50px; */
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+a {
+  color: #00B7FF;
+}
+
+#address {
+  /* float: right; */
+  color: red;
+  display: block;
+  margin: 0%;
+  position: absolute;
+  top: 2%;
+  left: 92%;
+  /* transform: translate(-50%, -50%); */
+}
+
+#centerbox {
+  display: block;
+  margin: 0%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#place {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin:auto;
+  /* width: 900px; */
+  height: auto; 
+  transform: translate(-50%, -50%);
+}
+
+.flex {
+  display: flex;
+  /* background-color: white; */
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
+
+  margin: 0%;
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  height: 50px;
+  width: 90%;
+}
+
+#story {
+  display: block;
+}
+
+#textbox {
+  text-align: center;
+  /* width: 500px; */
+  border: 1px solid #333;
+  box-shadow: 8px 8px 5px #444;
+  padding: 8px 12px;
+  flex-grow: 1;
+  background-image: linear-gradient(180deg, #fff, #ddd 40%, #ccc);
+}
+
+#mic #mic_img{
+  text-align: center;
+  border-radius: 50%;
+  border: none;
+  background-color: rgb(146, 199, 241);
+  width: 50px;
+  height: 50px;
+}
+
+#info{
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  text-align: center;
+  /* z-index: 100; */
+  color: white;
+  display: block;
+  font-size: 50px;
+  font-family: monospace;
+}
+
+#particles-js{
+  position: absolute;
+  top: 0%;
+  width: 100%;
+  text-align: center;
+  z-index: 100;
+  display: block;
+  pointer-events: none;
+}
+
+#h1Text {
+  text-align: center;
+  margin: 0%;
+  /* font-size: 50px; */
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+
+/* place img */
+.park{
+  background-image: url('/images/park.jpg');
+}
+
+.restaurant{
+  background-image: url('/images/restaurant.jpg');
+}
+
+.school{
+  background-image: url('/images/school.png');
+}
+
+#stats {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+#park_btn {
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@media (max-width:1000px){
+  .flex {
+    display: flex;
+    /* background-color: white; */
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  
+    margin: 0%;
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  
+    height: 50px;
+    width: 90%;
+
+  }
+  #textbox {
+    text-align: center;
+    /* width: 500px; */
+    border: 1px solid #333;
+    box-shadow: 8px 8px 5px #444;
+    padding: 30px 12px;
+    font-size: 50px;
+    flex-grow: 1;
+    background-image: linear-gradient(180deg, #fff, #ddd 40%, #ccc);
+  }
+
+  #mic #mic_img{
+    height: 170px;
+    width: 170px;
+  }
+
+  #address {
+    /* float: right; */
+    color: red;
+    display: block;
+    margin: 0%;
+    position: absolute;
+    top: 2%;
+    left: 85%;
+    /* transform: translate(-50%, -50%); */
+  }
+
+  #h1Text {
+    text-align: center;
+    margin: 0%;
+    font-size: 50px;
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  #place {
+    width: 100% 
+  }
+}
+
+

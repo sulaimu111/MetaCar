@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/109/three.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.2.0/Tween.min.js"></script>
+    <!-- <script src="https://unpkg.com/three@0.125.2/examples/jsm/loaders/OBJLoader.js"></script> -->
+    <!-- <script type="module" src="/javascripts/GLTFLoader.js"></script> -->
+    <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/FontLoader.js"></script>
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script>
+    
+    <!-- <script src="/javascripts/move.js" charset="utf-8"></script> -->
+  </head>
+  <body>
+    <div id="stats"></div>
+    <div class="h1box">
+      <img id="place">
+      <h1 id="h1Text"></h1>
+      <button id="park_btn" onclick="press()">go to the park</button>
+    </div>    
+    <span id="spanWord" style="display: none;"></span>
+    <!-- <button type="button" onclick="run()">start</button> -->
+    <script src="/javascripts/dijkstra_search.js"></script>
+    <script src="/javascripts/move.js"></script>
+    
+  </body>
+  
+</html>

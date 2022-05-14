@@ -1,0 +1,22 @@
+{
+  "name": "test1",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "@google-cloud/speech": "^4.9.0",
+    "axios": "^0.25.0",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "ejs": "~2.6.1",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "mongodb": "^3.7.3",
+    "morgan": "~1.9.1",
+    "socket.io": "^4.4.1",
+    "three": "^0.138.3"
+  }
+}

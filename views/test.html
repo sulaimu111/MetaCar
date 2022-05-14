@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello Three.js</title>
+    <!-- <link rel="stylesheet" href="./index.css" /> -->
+    <style type="text/css">
+      #info{
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        text-align: center;
+        z-index: 100;
+        color: white;
+        display: block;
+        font-size: 50px;
+        font-family: monospace;
+      }
+      #particles-js{
+        position: absolute;
+        top: 0%;
+        width: 100%;
+        text-align: center;
+        z-index: 100;
+        display: block;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id=particles-js></div>
+    <!-- <script type="module">
+      import particlesJs from 'https://cdn.skypack.dev/particles.js';
+      particlesJs.load('particles-js', 'particlesjs-config.json', function(){
+        console.log('particles.json loaded...');
+      });
+    </script> -->
+    <!-- <script src="particles.js-master/particles.js"></script>
+    <script src="particles.js-master/demo/js/app.js"></script> -->
+    
+    <script type="module">
+      import * as THREE from 'https://cdn.skypack.dev/three';
+      import {OrbitControls} from 'https://cdn.skypack.dev/three/examples/jsm/controls/OrbitControls.js';
+      console.log('prrrrrrrrrrr2');
+      const scene = new THREE.Scene();
+
+      const camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 10 );
+      camera.position.z = 5;
+      
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize( window.innerWidth, window.innerHeight );
+      document.body.appendChild( renderer.domElement );
+
+      const geometry = new THREE.SphereGeometry(1, 32, 32);
+      const texture = new THREE.TextureLoader().load('https://cdn.materialdistrict.com/wp-content/uploads/2019/10/material-highlights-dutch-design-week-2019-materialdistrict-1.jpg');
+      const material = new THREE.MeshBasicMaterial( { map:texture } ); //color: 0xffff00
+      const sphere = new THREE.Mesh( geometry, material );
+      scene.add( sphere );
+
+      const controls = new OrbitControls( camera, renderer.domElement );
+      
+      function animate() {
+
+        sphere.rotation.x += 0.01;
+        sphere.rotation.y += 0.01;
+        renderer.render( scene, camera );
+        requestAnimationFrame(animate);
+        controls.update();
+      }
+      animate();
+    </script>
+    <!-- <script>
+      particlesJs.load('particles-js', 'particlesjs-config.json', function(){
+        console.log('particles.json loaded...');
+      });
+    </script> -->
+    <div id="info">TEST Studio</div>
+  </body>
+</html>
