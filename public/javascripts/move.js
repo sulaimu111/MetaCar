@@ -125,6 +125,8 @@ let sphereGroundContact
 let gripper_pos_x, gripper_pos_y, gripper_pos_z, metacar_pos_x, metacar_pos_z
 
 let command
+let flag_forward_place = true
+let flag_backward_place = true
 
 // const timeStep = 1.0 / 60.0 // seconds
 
@@ -804,6 +806,7 @@ function initCannonWorld() {
 
 
 function forward(){
+
   if(metacarObj.rotation.y<=0.5 && metacarObj.rotation.y>=-0.5){
     metacarObj.rotation.y = 0
   }
@@ -917,6 +920,8 @@ function forward(){
     // }
 
     // flag_sec1 = true
+    console.log('m = ', m)
+    console.log('l = ', l)
     if(flag_sec1 && flag_sec2 && spanWord == 1){
       console.log("spanWord == 1")
       flag_sec2 = false
@@ -936,6 +941,9 @@ function forward(){
       }
       while (road_path_sec.length) {
         road_path_sec.pop();
+      }
+      while (turn_path.length) {
+        turn_path.pop();
       }
 
       map[m][map[m].indexOf(2)] = 1
@@ -962,6 +970,9 @@ function forward(){
       while (road_path_sec.length) {
         road_path_sec.pop();
       }
+      while (turn_path.length) {
+        turn_path.pop();
+      }
 
       map[m][map[m].indexOf(2)] = 1
       map[l][map[l].indexOf(4)] = 2
@@ -969,7 +980,7 @@ function forward(){
       
     }
     else if(flag_sec1 && flag_sec2 && spanWord == 3){
-      console.log("spanWord == 3")
+      console.log("spanWord == 333")
       flag_sec2 = false
       // flag_spanWord = true
       flag_record3 = true
@@ -988,10 +999,27 @@ function forward(){
       while (road_path_sec.length) {
         road_path_sec.pop();
       }
+      while (turn_path.length) {
+        turn_path.pop();
+      }
+      // turn_path.pop();
 
-      map[m][map[m].indexOf(2)] = 1
-      map[l][map[l].indexOf(4)] = 2
-      map[9][0] = 4
+      map =  [[0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+              [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [4, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];//park:(3, 3);
+
+      // map[m][map[m].indexOf(2)] = 1
+      // map[l][map[l].indexOf(4)] = 2
+      // map[9][0] = 4
+      
     }
     // else if(flag_turn_around){
     //   console.log("flag_turn_around")
@@ -1121,7 +1149,7 @@ function forward_place(){
     // flag_stop = false
   }
   else if(gripperABody.position.x >= gripper_pos_x-4 && gripperBBody.position.x <= gripper_pos_x+4 && flag_step1){
-    // console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+    console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeee")
     gripperABody.position.x = gripperABody.position.x - 0.05
     gripperBBody.position.x = gripperBBody.position.x + 0.05
   }
@@ -1189,6 +1217,19 @@ function forward_place(){
   }
   else if((boxABody.position.x>=59-adjustment && boxABody.position.x<=59+adjustment) && (boxABody.position.y>=0.5-adjustment && boxABody.position.y<=0.5+adjustment) && (boxABody.position.z>=65-adjustment && boxABody.position.z<=65+adjustment)){
     console.log("finishhhhhhhhhhhhhhh")
+    gripperABody.position.x = metacarObj.position.x
+    gripperABody.position.z = metacarObj.position.z
+    gripperBBody.position.x = metacarObj.position.x
+    gripperBBody.position.z = metacarObj.position.z
+    gripperTopBody.position.y = 6.1
+    gripperTopBody.position.z = metacarObj.position.z
+    flag_step1 = false
+    flag_step2 = false
+    flag_step3 = false
+    flag_sec3 = true
+    flag_forward_place = false
+    flag_backward_place = true
+    flag_record5 = true
   }
 
   // console.log("boxABody.position = ", boxABody.position)
@@ -1285,6 +1326,111 @@ function forward_place(){
   // console.log("gripperBBody.position.z = ", gripperBBody.position.z)
   // console.log("metacarObj.position.x = ", metacarObj.position.x)
   // console.log("metacarObj.position.z = ", metacarObj.position.z)
+}
+
+function backward_place(){
+
+  if(flag_sec3){
+    while (path.length) {
+      path.pop();
+    }
+    while (road_path.length) {
+      road_path.pop();
+    }
+    while (road_path_sec.length) {
+      road_path_sec.pop();
+    }
+    flag_tween1 = true
+    flag_tween4 = false
+    flag_sec3 = false
+    flag_stop = false
+    
+    map = map_park2
+    // map = [[1, 1, 1, 1, 2, 1, 1, 1, 1],
+    //       [0, 0, 1, 0, 0, 1, 0, 0, 1],
+    //       [0, 0, 1, 0, 0, 1, 0, 0, 1],
+    //       [0, 1, 1, 0, 1, 1, 0, 4, 1]];
+    
+    console.log("flag_sec3")
+    row = map.length;
+    col = map[0].length;
+    turn_path2.push(0)
+  }
+  
+  
+  if(move_count>=20){
+    flag_record1 = true
+  }
+
+  if(((metacarObj.position.x<=69+adjustment && metacarObj.position.x>=69-adjustment) && (metacarObj.position.z>=15-adjustment && metacarObj.position.z<=15+adjustment) || //park A
+      (metacarObj.position.x<=69+adjustment && metacarObj.position.x>=69-adjustment) && (metacarObj.position.z>=55-adjustment && metacarObj.position.z<=55+adjustment) || //park A
+      (metacarObj.position.x<=60+adjustment && metacarObj.position.x>=60-adjustment) && (metacarObj.position.z>=55-adjustment && metacarObj.position.z<=55+adjustment) || //park A
+      (metacarObj.position.x<=-20+adjustment && metacarObj.position.x>=-20-adjustment) && (metacarObj.position.z>=0-adjustment && metacarObj.position.z<=0+adjustment) ||
+      (metacarObj.position.x<=-30+adjustment && metacarObj.position.x>=-30-adjustment) && (metacarObj.position.z>=0-adjustment && metacarObj.position.z<=0+adjustment) ||
+      (metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=0-adjustment && metacarObj.position.z<=0+adjustment) || //library
+      (metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=-15-adjustment && metacarObj.position.z<=-15+adjustment) || //school
+      (metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=15-adjustment && metacarObj.position.z<=15+adjustment))  && //park
+      flag_record1){
+    console.log('stttttttttttttttoooop')
+    flag_forward = false
+    flag_turn = true
+    flag_record1 = false
+    flag_record4 = true
+    move_count = 0
+    if(turn_path2.length < 1){
+      console.log('nnnnnnnnnnnnnnnnnnnnnnnnnnnn')
+      flag_stop = true
+      console.log("on park begin")
+      flag_library = false
+      flag_school = false
+      flag_park = false
+      flag_sec1 = true
+      map =  [[0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+              [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];//park:(3, 3);
+      console.log(map)
+      row = map.length;
+      col = map[0].length;
+      console.log('row = ', row, " col = ", col)
+    }
+  }
+  else if((metacarObj.position.x>=-70-adjustment && metacarObj.position.x<=-70+adjustment) && (metacarObj.position.z>=54-adjustment && metacarObj.position.z<=54+adjustment) && flag_sec2 != true){
+    console.log('stttttttttttttttoooop')
+    flag_forward = false
+    flag_turn = true
+    flag_record1 = false
+    move_count = 0
+    if(turn_path2.length < 1){
+      console.log('n222222222222222')
+      flag_stop = true
+    }
+  }
+  
+
+  if(turn_direction2 == 0 && flag_stop!=true){
+    move_count = move_count + 1
+    metacarObj.position.x = metacarObj.position.x + 0.5
+  }
+  else if(turn_direction2 == 1 && flag_stop!=true){
+    move_count = move_count + 1
+    metacarObj.position.z = metacarObj.position.z - 0.5
+  }
+  else if(turn_direction2 == 2 && flag_stop!=true){
+    move_count = move_count + 1
+    metacarObj.position.x = metacarObj.position.x - 0.5
+  }
+  else if(turn_direction2 == 3 && flag_stop!=true){
+    move_count = move_count + 1
+    metacarObj.position.z = metacarObj.position.z + 0.5
+  }
 }
 
 function turn_around(){
@@ -1496,16 +1642,23 @@ function move() {
         flag_record4 = false
         console.log("shift_turn")
       }
+      if(flag_forward_place){
+        forward_place()
+      }
+      else if(flag_backward_place){
+        backward_place()
+      }
       // console.log("flag_forward_place")
       // console.log(a)
       // console.log("turn_path = ", turn_path)
-      forward_place()
+      
     }
     else if(flag_turn_around){
       console.log("flag_turn_around")
       console.log(a)
       turn_around()
     }
+    console.log("turn_path = ", turn_path)
 
     // carBody.position.x = metacarObj.position.x
     // carBody.position.z = metacarObj.position.z
