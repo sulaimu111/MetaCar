@@ -15,6 +15,8 @@ let tween, tween2, tweenBack
 let invert = 1
 let startTracking = false
 let spanWord = 0
+let spanWord_target1 = 0
+let spanWord_target2 = 0
 let offset = {x:0, z:0, rotateY:0}
 let target = {x:20, z:0, rotateY:0} 
 let pp = {x:0, z:0, y:0}
@@ -113,7 +115,7 @@ let direction_record = 0
 let world
 let groundBody
 let sphereBody
-let boxABody,boxBBody
+let boxC1aBody,boxC1bBody
 let carBody
 let gripperABody, gripperA2Body, gripperBBody, gripperB2Body
 let sphere
@@ -130,7 +132,7 @@ let flag_backward_place = true
 
 // const timeStep = 1.0 / 60.0 // seconds
 
-const socket = io('https://b3d2-140-125-30-128.jp.ngrok.io')
+const socket = io('https://438d-59-125-76-248.jp.ngrok.io')
 
 socket.on('connection')
 
@@ -152,7 +154,7 @@ function initObject() {
   const gltfLoader = new THREE.GLTFLoader()
   // const gltfLoader = new THREE.GLTFLoader().setPath('asset/Porsche 911/');
 
-  gltfLoader.load('assets/robomaster01.glb', function ( gltf ) {
+  gltfLoader.load('assets/robomaster02.glb', function ( gltf ) {
 
     metacarObj = gltf.scene
     metacarObj.position.x = -70
@@ -180,6 +182,93 @@ function initObject() {
   });
 }
 // initObject()
+
+
+class gripper {
+  constructor() {
+    // 宣告頭、身體、腳幾何體大小
+    const gripperbase1Geo = new THREE.BoxGeometry(1, 10, 1);
+    const gripperbase2Geo = new THREE.BoxGeometry(1, 10, 1);
+    const gripperbase3Geo = new THREE.BoxGeometry(10, 1, 1)
+    const gripperbase4Geo = new THREE.BoxGeometry(1, 2, 10)
+    const gripperLGeo = new THREE.BoxGeometry(3, 1, 1);
+    const gripperRGeo = new THREE.BoxGeometry(3, 1, 1);
+
+    const gripperbase1Mat = new THREE.MeshPhongMaterial({
+      color: 0x696969,
+      // wireframe: true
+    });
+    const gripperbase2Mat = new THREE.MeshPhongMaterial({
+      color: 0x696969,
+      // wireframe: true
+    });
+    const gripperbase3Mat = new THREE.MeshPhongMaterial({
+      color: 0x696969,
+      // wireframe: true
+    });
+    const gripperbase4Mat = new THREE.MeshPhongMaterial({
+      color: 0x696969,
+      // wireframe: true
+    });
+    const gripperLMat = new THREE.MeshPhongMaterial({
+      color: 0x696969,
+      // wireframe: true
+    });
+    const gripperRMat = new THREE.MeshPhongMaterial({
+      color: 0x696969,
+      // wireframe: true
+    });
+
+
+    this.base1 = new THREE.Mesh(gripperbase1Geo, gripperbase1Mat)
+    // this.base1.position.set(-72, -5, 54)
+    this.base1.position.set(-1,0,-1)
+
+    this.base2 = new THREE.Mesh(gripperbase2Geo, gripperbase2Mat)
+    // this.base1.position.set(-72, -5, 54)
+    this.base2.position.set(-1,0,1)
+
+    this.base3 = new THREE.Mesh(gripperbase3Geo, gripperbase3Mat)
+    // this.base2.position.set(-72, -1, 54)
+    this.base3.position.set(-4,-1,0)
+
+    this.base4 = new THREE.Mesh(gripperbase4Geo, gripperbase4Mat)
+    this.base4.position.set(1,-1,0)
+
+    this.gripperL = new THREE.Mesh(gripperLGeo, gripperLMat)
+    this.gripperL.position.set(3,-1,-0.5)
+
+    this.gripperR = new THREE.Mesh(gripperRGeo, gripperRMat)
+    this.gripperR.position.set(3,-1,0.5)
+
+    // 將四隻腳組合為一個 group
+    this.clip = new THREE.Group()
+    this.clip.add(this.gripperL)
+    this.clip.add(this.gripperR)
+    this.clip.add(this.base3)
+    this.clip.add(this.base4)
+
+
+    // 將頭、身體、腳組合為一個 group
+    this.gripper = new THREE.Group()
+    this.gripper.add(this.clip)
+    this.gripper.add(this.base1)
+    this.gripper.add(this.base2)
+
+    this.gripper.traverse(function(object) {
+      if (object instanceof THREE.Mesh) {
+        object.castShadow = true
+        object.receiveShadow = true
+      }
+    })
+  }
+}
+
+function createGripper() {
+  gripperObj = new gripper()
+  scene.add(gripperObj.gripper)
+}
+
 
 function initPlace(){
 
@@ -331,6 +420,7 @@ function init(){
   // createCreeper()
   initObject()
   initPlace()
+  createGripper()
   // createMetacar()
 
   // metacarObj.position.x = -70
@@ -429,44 +519,45 @@ function initCannonWorld() {
   // })
   // world.addContactMaterial(carGroundContact)
 
-  // 建立球剛體
-  let boxAShape = new CANNON.Box(new CANNON.Vec3(2.5, 2.5, 2.5))
-  let boxACM = new CANNON.Material()
-  boxABody = new CANNON.Body({
+  // 建立C1方塊
+  let boxC1aShape = new CANNON.Box(new CANNON.Vec3(2.5, 2.5, 2.5))
+  let boxC1aCM = new CANNON.Material()
+  boxC1aBody = new CANNON.Body({
     mass: 5,
-    shape: boxAShape,
-    position: new CANNON.Vec3(69, 0.5, 65),
-    material: boxACM
+    shape: boxC1aShape,
+    position: new CANNON.Vec3(60, 0.5, 54),
+    material: boxC1aCM
   })
-  world.add(boxABody)
+  world.add(boxC1aBody)
   
   // 設定兩剛體碰撞時交互作用屬性
-  boxAGroundContact = new CANNON.ContactMaterial(groundCM, boxACM, {
+  boxC1aGroundContact = new CANNON.ContactMaterial(groundCM, boxC1aCM, {
     friction: friction, // 摩擦力
     restitution: restitution // 恢復係數, 衡量兩個物體碰撞後反彈程度
   })
-  world.addContactMaterial(boxAGroundContact)
+  world.addContactMaterial(boxC1aGroundContact)
 
-
-  let boxBShape = new CANNON.Box(new CANNON.Vec3(1.5, 2.5, 1.5))
-  let boxBCM = new CANNON.Material()
-  boxBBody = new CANNON.Body({
+  let boxC1bShape = new CANNON.Box(new CANNON.Vec3(1.5, 2.5, 1.5))
+  let boxC1bCM = new CANNON.Material()
+  boxC1bBody = new CANNON.Body({
     mass: 5,
-    shape: boxBShape,
-    position: new CANNON.Vec3(69, -4.5, 65),
-    material: boxBCM
+    shape: boxC1bShape,
+    position: new CANNON.Vec3(60, -4.5, 54),
+    material: boxC1bCM
   })
-  world.add(boxBBody)
+  world.add(boxC1bBody)
 
-  boxABJoint = new CANNON.LockConstraint(boxABody, boxBBody)
-  world.addConstraint(boxABJoint)
+  boxC1bGroundContact = new CANNON.ContactMaterial(groundCM, boxC1bCM, {
+    friction: friction, // 摩擦力
+    restitution: restitution // 恢復係數, 衡量兩個物體碰撞後反彈程度
+  })
+  world.addContactMaterial(boxC1bGroundContact)
+
+  boxC1Joint = new CANNON.LockConstraint(boxC1aBody, boxC1bBody)
+  world.addConstraint(boxC1Joint)
 
   // 設定兩剛體碰撞時交互作用屬性
-  boxBGroundContact = new CANNON.ContactMaterial(groundCM, boxBCM, {
-    friction: friction, // 摩擦力
-    restitution: restitution // 恢復係數, 衡量兩個物體碰撞後反彈程度
-  })
-  world.addContactMaterial(boxBGroundContact)
+  
 
 
   // metacarObj.position.x = -70
@@ -479,7 +570,7 @@ function initCannonWorld() {
   gripperABody = new CANNON.Body({
     mass: 0,
     shape: gripperAShape,
-    position: new CANNON.Vec3(-70, -5, 54),
+    position: new CANNON.Vec3(-70, -2.5, 54),
     material: gripperACM
   })
   world.add(gripperABody)
@@ -498,7 +589,7 @@ function initCannonWorld() {
   gripperA2Body = new CANNON.Body({
     mass: 0,
     shape: gripperA2Shape,
-    position: new CANNON.Vec3(-70, -5, 54),
+    position: new CANNON.Vec3(-70, -2.5, 54),
     material: gripperA2CM
   })
   world.add(gripperA2Body)
@@ -519,7 +610,7 @@ function initCannonWorld() {
   gripperA3Body = new CANNON.Body({
     mass: 0,
     shape: gripperA3Shape,
-    position: new CANNON.Vec3(-70, -5, 54),
+    position: new CANNON.Vec3(-70, -2.55, 54),
     material: gripperA3CM
   })
   world.add(gripperA3Body)
@@ -539,7 +630,7 @@ function initCannonWorld() {
   gripperA4Body = new CANNON.Body({
     mass: 0,
     shape: gripperA4Shape,
-    position: new CANNON.Vec3(-70, -5, 54),
+    position: new CANNON.Vec3(-70, -2.5, 54),
     material: gripperA4CM
   })
   world.add(gripperA4Body)
@@ -559,7 +650,7 @@ function initCannonWorld() {
   gripperBBody = new CANNON.Body({
     mass: 0,
     shape: gripperBShape,
-    position: new CANNON.Vec3(-70, -5, 54),
+    position: new CANNON.Vec3(-70, -2.5, 54),
     material: gripperBCM
   })
   world.add(gripperBBody)
@@ -579,7 +670,7 @@ function initCannonWorld() {
   gripperB2Body = new CANNON.Body({
     mass: 0,
     shape: gripperB2Shape,
-    position: new CANNON.Vec3(-70, -5, 54),
+    position: new CANNON.Vec3(-70, -2.5, 54),
     material: gripperB2CM
   })
   world.add(gripperB2Body)
@@ -599,7 +690,7 @@ function initCannonWorld() {
   gripperB3Body = new CANNON.Body({
     mass: 0,
     shape: gripperB3Shape,
-    position: new CANNON.Vec3(-70, -5, 54),
+    position: new CANNON.Vec3(-70, -2.5, 54),
     material: gripperB3CM
   })
   world.add(gripperB3Body)
@@ -619,7 +710,7 @@ function initCannonWorld() {
   gripperB4Body = new CANNON.Body({
     mass: 0,
     shape: gripperB4Shape,
-    position: new CANNON.Vec3(-70, -5, 54),
+    position: new CANNON.Vec3(-70, -2.5, 54),
     material: gripperB4CM
   })
   world.add(gripperB4Body)
@@ -701,7 +792,7 @@ function initCannonWorld() {
   gripperA = new THREE.Mesh(gripperAGeo, gripperAMat);
   gripperA.castShadow = true
   // car.position.y = 10
-  scene.add(gripperA);
+  // scene.add(gripperA);
 
   const gripperA2Geo = new THREE.BoxGeometry(1, 4, 1);
   const gripperA2Mat = new THREE.MeshPhongMaterial({
@@ -711,7 +802,7 @@ function initCannonWorld() {
   gripperA2 = new THREE.Mesh(gripperA2Geo, gripperA2Mat);
   gripperA2.castShadow = true
   // car.position.y = 10
-  scene.add(gripperA2);
+  // scene.add(gripperA2);
 
   const gripperA3Geo = new THREE.BoxGeometry(1, 4, 1);
   const gripperA3Mat = new THREE.MeshPhongMaterial({
@@ -721,7 +812,7 @@ function initCannonWorld() {
   gripperA3 = new THREE.Mesh(gripperA3Geo, gripperA3Mat);
   gripperA3.castShadow = true
   // car.position.y = 10
-  scene.add(gripperA3);
+  // scene.add(gripperA3);
 
   const gripperA4Geo = new THREE.BoxGeometry(5, 5, 1);
   const gripperA4Mat = new THREE.MeshPhongMaterial({
@@ -731,7 +822,7 @@ function initCannonWorld() {
   gripperA4 = new THREE.Mesh(gripperA4Geo, gripperA4Mat);
   gripperA4.castShadow = true
   // car.position.y = 10
-  scene.add(gripperA4);
+  // scene.add(gripperA4);
 
   const gripperBGeo = new THREE.BoxGeometry(10, 1, 1);
   const gripperBMat = new THREE.MeshPhongMaterial({
@@ -741,7 +832,7 @@ function initCannonWorld() {
   gripperB = new THREE.Mesh(gripperBGeo, gripperBMat);
   gripperB.castShadow = true
   // car.position.y = 10
-  scene.add(gripperB);
+  // scene.add(gripperB);
 
   const gripperB2Geo = new THREE.BoxGeometry(1, 4, 1);
   const gripperB2Mat = new THREE.MeshPhongMaterial({
@@ -751,7 +842,7 @@ function initCannonWorld() {
   gripperB2 = new THREE.Mesh(gripperB2Geo, gripperB2Mat);
   gripperB2.castShadow = true
   // car.position.y = 10
-  scene.add(gripperB2);
+  // scene.add(gripperB2);
 
   const gripperB3Geo = new THREE.BoxGeometry(1, 4, 1);
   const gripperB3Mat = new THREE.MeshPhongMaterial({
@@ -761,7 +852,7 @@ function initCannonWorld() {
   gripperB3 = new THREE.Mesh(gripperB3Geo, gripperB3Mat);
   gripperB3.castShadow = true
   // car.position.y = 10
-  scene.add(gripperB3);
+  // scene.add(gripperB3);
 
   const gripperB4Geo = new THREE.BoxGeometry(5, 5, 1);
   const gripperB4Mat = new THREE.MeshPhongMaterial({
@@ -771,7 +862,7 @@ function initCannonWorld() {
   gripperB4 = new THREE.Mesh(gripperB4Geo, gripperB4Mat);
   gripperB4.castShadow = true
   // car.position.y = 10
-  scene.add(gripperB4);
+  // scene.add(gripperB4);
 
   const gripperTopGeo = new THREE.BoxGeometry(20, 1, 5);
   const gripperTopMat = new THREE.MeshPhongMaterial({
@@ -781,27 +872,27 @@ function initCannonWorld() {
   gripperTop = new THREE.Mesh(gripperTopGeo, gripperTopMat);
   gripperTop.castShadow = true
   // car.position.y = 10
-  scene.add(gripperTop);
+  // scene.add(gripperTop);
 
-  const boxAGeo = new THREE.BoxGeometry(5, 5, 5);
-  const boxAMat = new THREE.MeshPhongMaterial({
+  const boxC1aGeo = new THREE.BoxGeometry(5, 5, 5);
+  const boxC1aMat = new THREE.MeshPhongMaterial({
     color: 0x00ff00,
     // wireframe: true
   });
-  boxA = new THREE.Mesh(boxAGeo, boxAMat);
-  boxA.castShadow = true
-  boxA.position.y = 10
-  scene.add(boxA);
+  boxC1a = new THREE.Mesh(boxC1aGeo, boxC1aMat);
+  boxC1a.castShadow = true
+  boxC1a.position.y = 10
+  scene.add(boxC1a);
 
-  const boxBGeo = new THREE.BoxGeometry(3, 5, 3);
-  const boxBMat = new THREE.MeshPhongMaterial({
+  const boxC1bGeo = new THREE.BoxGeometry(3, 5, 3);
+  const boxC1bMat = new THREE.MeshPhongMaterial({
     color: 0x00ff00,
     // wireframe: true
   });
-  boxB = new THREE.Mesh(boxBGeo, boxBMat);
-  boxB.castShadow = true
-  boxB.position.y = 10
-  scene.add(boxB);
+  boxC1b = new THREE.Mesh(boxC1bGeo, boxC1bMat);
+  boxC1b.castShadow = true
+  boxC1b.position.y = 10
+  scene.add(boxC1b);
 }
 
 
@@ -1085,15 +1176,12 @@ function forward_place(){
     flag_record1 = true
   }
 
-  if(((metacarObj.position.x<=69+adjustment && metacarObj.position.x>=69-adjustment) && (metacarObj.position.z>=15-adjustment && metacarObj.position.z<=15+adjustment) || //park A
-      (metacarObj.position.x<=69+adjustment && metacarObj.position.x>=69-adjustment) && (metacarObj.position.z>=55-adjustment && metacarObj.position.z<=55+adjustment) || //park A
-      (metacarObj.position.x<=60+adjustment && metacarObj.position.x>=60-adjustment) && (metacarObj.position.z>=55-adjustment && metacarObj.position.z<=55+adjustment) || //park A
-      (metacarObj.position.x<=-20+adjustment && metacarObj.position.x>=-20-adjustment) && (metacarObj.position.z>=0-adjustment && metacarObj.position.z<=0+adjustment) ||
-      (metacarObj.position.x<=-30+adjustment && metacarObj.position.x>=-30-adjustment) && (metacarObj.position.z>=0-adjustment && metacarObj.position.z<=0+adjustment) ||
+  if(((metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=15-adjustment && metacarObj.position.z<=15+adjustment) || //park
+      (metacarObj.position.x<=60+adjustment && metacarObj.position.x>=60-adjustment) && (metacarObj.position.z>=15-adjustment && metacarObj.position.z<=15+adjustment) || //park C1
+      (metacarObj.position.x<=60+adjustment && metacarObj.position.x>=60-adjustment) && (metacarObj.position.z>=44-adjustment && metacarObj.position.z<=44+adjustment) || //park C1
       (metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=0-adjustment && metacarObj.position.z<=0+adjustment) || //library
-      (metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=-15-adjustment && metacarObj.position.z<=-15+adjustment) || //school
-      (metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=15-adjustment && metacarObj.position.z<=15+adjustment))  && //park
-      flag_record1){
+      (metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=-15-adjustment && metacarObj.position.z<=-15+adjustment)) //school
+      && flag_record1){
     console.log('stttttttttttttttoooop')
     flag_forward = false
     flag_turn = true
@@ -1138,11 +1226,14 @@ function forward_place(){
 
 
   if(flag_record5 && flag_stop){
+    gripperABody.position.z = gripperABody.position.z + 2
+    gripperBBody.position.z = gripperBBody.position.z + 2
     console.log("flag_record5 = ", flag_record5)
     gripper_pos_x = gripperABody.position.x
     gripper_pos_z = gripperABody.position.z
     gripper_pos_y = gripperABody.position.y
     metacar_pos_x = metacarObj.position.x
+
     // metacarObj_pos_z = metacarObj.position.z
     flag_record5 = false
     flag_step1 = true
@@ -1152,12 +1243,20 @@ function forward_place(){
     console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeee")
     gripperABody.position.x = gripperABody.position.x - 0.05
     gripperBBody.position.x = gripperBBody.position.x + 0.05
+    gripperObj.gripperL.position.z = gripperObj.gripperL.position.z - 0.05
+    gripperObj.gripperR.position.z = gripperObj.gripperR.position.z + 0.05
   }
-  else if(gripperABody.position.z <= gripper_pos_z+8 && gripperBBody.position.z <= gripper_pos_z+8 && flag_step1){
+  else if(gripperABody.position.z <= gripper_pos_z+6 && gripperBBody.position.z <= gripper_pos_z+6 && flag_step1){
     // console.log("ffffffffffffffffffffffffffff")
     gripperABody.position.z = gripperABody.position.z + 0.05
     gripperBBody.position.z = gripperBBody.position.z + 0.05
     gripperTopBody.position.z = gripperTopBody.position.z + 0.05
+    gripperObj.clip.position.x = gripperObj.clip.position.x + 0.05
+    // gripperObj.gripperR.position.x = gripperObj.gripperR.position.x + 0.05
+    // gripperObj.base1.position.y = gripperObj.base1.position.y + 0.05
+    // gripperObj.base3.position.x = gripperObj.base3.position.x + 0.05
+    // gripperObj.base4.position.x = gripperObj.base4.position.x + 0.05
+    // gripperObj.gripperR.position.z = gripperObj.gripperR.position.z + 0.05
   }
   else if(flag_step1){
     flag_step1 = false
@@ -1168,30 +1267,34 @@ function forward_place(){
     // console.log("gggggggggggggggggggggggggggg")
     gripperABody.position.x = gripperABody.position.x + 0.05
     gripperBBody.position.x = gripperBBody.position.x - 0.05
+    gripperObj.gripperL.position.z = gripperObj.gripperL.position.z + 0.05
+    gripperObj.gripperR.position.z = gripperObj.gripperR.position.z - 0.05
   }
-  else if(gripperABody.position.y <= gripper_pos_y+5 && gripperBBody.position.y <= gripper_pos_y+5 && flag_step1 != true && flag_step2){
+  else if(gripperABody.position.y <= gripper_pos_y+2.5 && gripperBBody.position.y <= gripper_pos_y+2.5 && flag_step1 != true && flag_step2){
     // console.log("gggggggggggggggggggggggggggg")
     gripperABody.position.y = gripperABody.position.y + 0.05
     gripperBBody.position.y = gripperBBody.position.y + 0.05
+    gripperObj.clip.position.y = gripperObj.clip.position.y + 0.05
   }
   // else if(gripperABody.position.y <= gripper_pos_y+10 && gripperBBody.position.y <= gripper_pos_y+10 && flag_step1 != true){
   //   console.log("ffffffffffffffffffffffffffff")
   //   gripperABody.position.y = gripperABody.position.y + 0.05
   //   gripperBBody.position.y = gripperBBody.position.y + 0.05
-  //   // boxBody.position.z = gripperABody.position.z
+  //   // boxC1body.position.z = gripperABody.position.z
   // }
   else if(gripperABody.position.z >= gripper_pos_z+3 && gripperBBody.position.z >= gripper_pos_z+3 && flag_step1 != true && flag_step2){
     // console.log("ffffffffffffffffffffffffffff")
     gripperABody.position.z = gripperABody.position.z - 0.05
     gripperBBody.position.z = gripperBBody.position.z - 0.05
     gripperTopBody.position.z = gripperTopBody.position.z - 0.05
-    // boxBody.position.z = gripperABody.position.z
+    gripperObj.clip.position.x = gripperObj.clip.position.x - 0.05
   }
   else if(metacarObj.position.x >= metacar_pos_x-10 && flag_step1 != true && flag_step2){
     metacarObj.position.x = metacarObj.position.x - 0.05
     gripperABody.position.x = gripperABody.position.x - 0.05
     gripperBBody.position.x = gripperBBody.position.x - 0.05
     gripperTopBody.position.x = metacarObj.position.x
+    gripperObj.gripper.position.x = metacarObj.position.x
     // console.log("step1_finish0")
   }
   else if(flag_step1 != true && flag_step2){
@@ -1200,10 +1303,11 @@ function forward_place(){
     // console.log("step1_finish")
   }
 
-  if(gripperABody.position.z <= gripper_pos_z+8 && gripperBBody.position.z <= gripper_pos_z+8 && flag_step1 != true && flag_step2 != true && flag_step3){
+  if(gripperABody.position.z <= gripper_pos_z+6 && gripperBBody.position.z <= gripper_pos_z+6 && flag_step1 != true && flag_step2 != true && flag_step3){
     gripperABody.position.z = gripperABody.position.z + 0.05
     gripperBBody.position.z = gripperBBody.position.z + 0.05
     gripperTopBody.position.z = gripperTopBody.position.z + 0.05
+    gripperObj.clip.position.x = gripperObj.clip.position.x + 0.05
     // console.log("gripperTopBody.position.z = " , gripperTopBody.position.z)
     // console.log("step2")
   }
@@ -1213,9 +1317,25 @@ function forward_place(){
     gripperBBody.position.y = gripperBBody.position.y - 0.05
     if(gripperTopBody.position.y >= 3.6){
       gripperTopBody.position.y = gripperTopBody.position.y - 0.05
+      gripperObj.clip.position.y = gripperObj.clip.position.y - 0.05
     }
   }
-  else if((boxABody.position.x>=59-adjustment && boxABody.position.x<=59+adjustment) && (boxABody.position.y>=0.5-adjustment && boxABody.position.y<=0.5+adjustment) && (boxABody.position.z>=65-adjustment && boxABody.position.z<=65+adjustment)){
+  // else if(flag_step1 != true && flag_step2 != true && flag_step3){
+  //   flag_step3 = false
+  // }
+
+  else if(gripperObj.clip.position.x >= 3 && flag_step1 != true && flag_step2 != true && flag_step3){
+    // console.log("gggggggggggggggggggggggggggg")
+    // gripperABody.position.z = gripperABody.position.z - 0.05
+    // gripperBBody.position.z = gripperBBody.position.z - 0.05
+    // gripperTopBody.position.z = gripperTopBody.position.z - 0.05
+    gripperObj.clip.position.x = gripperObj.clip.position.x - 0.05
+    // if(gripperTopBody.position.y >= 3.6){
+    //   gripperTopBody.position.y = gripperTopBody.position.y - 0.05
+    //   gripperObj.clip.position.y = gripperObj.clip.position.y - 0.05
+    // }
+  }
+  else if((boxC1aBody.position.x>=50-adjustment && boxC1aBody.position.x<=50+adjustment) && (boxC1aBody.position.y>=0.5-adjustment && boxC1aBody.position.y<=0.5+adjustment) && (boxC1aBody.position.z>=54-adjustment && boxC1aBody.position.z<=54+adjustment)){
     console.log("finishhhhhhhhhhhhhhh")
     gripperABody.position.x = metacarObj.position.x
     gripperABody.position.z = metacarObj.position.z
@@ -1232,7 +1352,8 @@ function forward_place(){
     flag_record5 = true
   }
 
-  // console.log("boxABody.position = ", boxABody.position)
+  console.log("boxC1aBody.position.x = ", boxC1aBody.position.x)
+  console.log("boxC1aBody.position.z = ", boxC1aBody.position.z)
 
   if(flag_step1){
     gripperA2Body.position.x = gripperABody.position.x
@@ -1299,6 +1420,7 @@ function forward_place(){
     gripperB4Body.position.x = gripperBBody.position.x+0.5
     gripperB4Body.position.y = gripperBBody.position.y
     gripperB4Body.position.z = gripperBBody.position.z+3
+    
 
     // gripperTopBody.position.x = metacarObj.position.x
     // gripperTopBody.position.z = metacarObj.position.z
@@ -1362,15 +1484,12 @@ function backward_place(){
     flag_record1 = true
   }
 
-  if(((metacarObj.position.x<=69+adjustment && metacarObj.position.x>=69-adjustment) && (metacarObj.position.z>=15-adjustment && metacarObj.position.z<=15+adjustment) || //park A
-      (metacarObj.position.x<=69+adjustment && metacarObj.position.x>=69-adjustment) && (metacarObj.position.z>=55-adjustment && metacarObj.position.z<=55+adjustment) || //park A
-      (metacarObj.position.x<=60+adjustment && metacarObj.position.x>=60-adjustment) && (metacarObj.position.z>=55-adjustment && metacarObj.position.z<=55+adjustment) || //park A
-      (metacarObj.position.x<=-20+adjustment && metacarObj.position.x>=-20-adjustment) && (metacarObj.position.z>=0-adjustment && metacarObj.position.z<=0+adjustment) ||
-      (metacarObj.position.x<=-30+adjustment && metacarObj.position.x>=-30-adjustment) && (metacarObj.position.z>=0-adjustment && metacarObj.position.z<=0+adjustment) ||
+  if(((metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=15-adjustment && metacarObj.position.z<=15+adjustment) || //park
+      (metacarObj.position.x<=60+adjustment && metacarObj.position.x>=60-adjustment) && (metacarObj.position.z>=15-adjustment && metacarObj.position.z<=15+adjustment) || //park C1
+      (metacarObj.position.x<=60+adjustment && metacarObj.position.x>=60-adjustment) && (metacarObj.position.z>=44-adjustment && metacarObj.position.z<=44+adjustment) || //park C1
       (metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=0-adjustment && metacarObj.position.z<=0+adjustment) || //library
-      (metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=-15-adjustment && metacarObj.position.z<=-15+adjustment) || //school
-      (metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=15-adjustment && metacarObj.position.z<=15+adjustment))  && //park
-      flag_record1){
+      (metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=-15-adjustment && metacarObj.position.z<=-15+adjustment)) //school
+      && flag_record1){
     console.log('stttttttttttttttoooop')
     flag_forward = false
     flag_turn = true
@@ -1658,7 +1777,7 @@ function move() {
       console.log(a)
       turn_around()
     }
-    console.log("turn_path = ", turn_path)
+    // console.log("turn_path = ", turn_path)
 
     // carBody.position.x = metacarObj.position.x
     // carBody.position.z = metacarObj.position.z
@@ -1695,6 +1814,10 @@ function move() {
       gripperTopBody.position.x = metacarObj.position.x
       gripperTopBody.position.z = metacarObj.position.z
       gripperTopBody.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), metacarObj.rotation.y)
+
+      gripperObj.gripper.position.x = metacarObj.position.x
+      gripperObj.gripper.position.z = metacarObj.position.z
+      gripperObj.gripper.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), metacarObj.rotation.y)
     }
     
 
@@ -1738,14 +1861,14 @@ function render(){
   //   sphere.quaternion.copy(sphereBody.quaternion)
   // }
 
-  if (boxA) {
-    boxA.position.copy(boxABody.position)
-    boxA.quaternion.copy(boxABody.quaternion)
+  if (boxC1a) {
+    boxC1a.position.copy(boxC1aBody.position)
+    boxC1a.quaternion.copy(boxC1aBody.quaternion)
   }
 
-  if (boxB) {
-    boxB.position.copy(boxBBody.position)
-    boxB.quaternion.copy(boxBBody.quaternion)
+  if (boxC1b) {
+    boxC1b.position.copy(boxC1bBody.position)
+    boxC1b.quaternion.copy(boxC1bBody.quaternion)
   }
 
   // if (car) {
