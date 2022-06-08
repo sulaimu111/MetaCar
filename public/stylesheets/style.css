@@ -141,6 +141,13 @@ a {
   transform: translate(-50%, -50%);
 }
 
+#park_btn2 {
+  position: absolute;
+  top: 90%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+}
+
 @media (max-width:1000px){
   .flex {
     display: flex;

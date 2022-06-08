@@ -66,7 +66,8 @@ router.post('/posttest', function(req, res, next){
   target = JSON.parse(target);
   // var target3 = JSON.parse(target2);
   console.log(target.target);
-  console.log(target.user_ip);
+  console.log(req.body);
+  // console.log(target.user_ip);
   req.io.emit("message", target.target);
   res.end("nodejs_ok");
   if(target.target == 2){
