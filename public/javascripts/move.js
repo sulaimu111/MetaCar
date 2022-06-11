@@ -1596,6 +1596,7 @@ function render(){
 
   if (boxA1a) {
     boxA1a.position.copy(boxA1aBody.position)
+    boxA1a.position.y = boxA1aBody.position.y - 2.5
     boxA1a.quaternion.copy(boxA1aBody.quaternion)
   }
 
@@ -1606,6 +1607,7 @@ function render(){
 
   if (boxA2a) {
     boxA2a.position.copy(boxA2aBody.position)
+    boxA2a.position.y = boxA2aBody.position.y - 2.5
     boxA2a.quaternion.copy(boxA2aBody.quaternion)
   }
 
@@ -1616,6 +1618,7 @@ function render(){
 
   if (boxA3a) {
     boxA3a.position.copy(boxA3aBody.position)
+    boxA3a.position.y = boxA3aBody.position.y - 2.5
     boxA3a.quaternion.copy(boxA3aBody.quaternion)
   }
 
@@ -1628,6 +1631,7 @@ function render(){
 
   if (boxB1a) {
     boxB1a.position.copy(boxB1aBody.position)
+    boxB1a.position.y = boxB1aBody.position.y - 2.5
     boxB1a.quaternion.copy(boxB1aBody.quaternion)
   }
 
@@ -1638,6 +1642,7 @@ function render(){
 
   if (boxB2a) {
     boxB2a.position.copy(boxB2aBody.position)
+    boxB2a.position.y = boxB2aBody.position.y - 2.5
     boxB2a.quaternion.copy(boxB2aBody.quaternion)
   }
 
@@ -1648,6 +1653,7 @@ function render(){
 
   if (boxB3a) {
     boxB3a.position.copy(boxB3aBody.position)
+    boxB3a.position.y = boxB3aBody.position.y - 2.5
     boxB3a.quaternion.copy(boxB3aBody.quaternion)
   }
 
@@ -1660,6 +1666,7 @@ function render(){
 
   if (boxC1a) {
     boxC1a.position.copy(boxC1aBody.position)
+    boxC1a.position.y = boxC1aBody.position.y - 2.5
     boxC1a.quaternion.copy(boxC1aBody.quaternion)
   }
 
@@ -1670,6 +1677,7 @@ function render(){
 
   if (boxC2a) {
     boxC2a.position.copy(boxC2aBody.position)
+    boxC2a.position.y = boxC2aBody.position.y - 2.5
     boxC2a.quaternion.copy(boxC2aBody.quaternion)
   }
 
@@ -1680,6 +1688,7 @@ function render(){
 
   if (boxC3a) {
     boxC3a.position.copy(boxC3aBody.position)
+    boxC3a.position.y = boxC3aBody.position.y - 2.5
     boxC3a.quaternion.copy(boxC3aBody.quaternion)
   }
 
@@ -1744,11 +1753,11 @@ window.addEventListener('resize', function(){
 })
 
 function press(){
-  document.getElementById("spanWord").innerHTML = 2
+  document.getElementById("spanWord").innerHTML = 1
 }
 
 function press2(){
-  document.getElementById("spanWord").innerHTML = 22
+  document.getElementById("spanWord").innerHTML = 11
 }
 
 init()
