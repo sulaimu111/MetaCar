@@ -73,20 +73,20 @@ let flag_turn_around = false
 let flag_step1 = true
 let flag_step2 = false
 let flag_step3 = false
-let map_library =[[4, 1, 1, 1],
-                  [0, 0, 0, 1],
-                  [0, 0, 0, 1],
-                  [1, 1, 1, 1],
-                  [0, 0, 0, 2],
-                  [0, 0, 0, 1],
-                  [1, 1, 1, 1],
-                  [0, 0, 0, 1],
-                  [0, 0, 0, 1]];
+let map_supermarket =[[0, 0, 0, 0],
+                      [1, 1, 1, 1],
+                      [0, 0, 0, 1],
+                      [0, 0, 0, 1],
+                      [1, 1, 1, 2],
+                      [0, 0, 0, 1],
+                      [0, 0, 0, 1],
+                      [1, 1, 1, 1],
+                      [0, 0, 0, 1]];
 
-let map_school = [[0, 0, 1, 0, 0, 4, 0, 0, 1],
-                  [0, 0, 1, 0, 0, 1, 0, 0, 1],
-                  [0, 0, 1, 0, 0, 1, 0, 0, 1],
-                  [1, 1, 1, 1, 2, 1, 1, 1, 1]];
+let map_restaurant = [[0, 1, 0, 0, 1, 0, 0, 1, 0],
+                      [0, 1, 0, 0, 1, 0, 0, 1, 0],
+                      [0, 1, 0, 0, 1, 0, 0, 1, 0],
+                      [0, 1, 1, 1, 2, 1, 1, 1, 0]];
 
 let map_park = [[0, 1, 1, 1, 2, 1, 1, 1, 0],
                 [0, 1, 0, 0, 1, 0, 0, 1, 0],
@@ -118,6 +118,7 @@ let direction_record = 0
 let world
 let groundBody
 let sphereBody
+let boxB1aBody,boxB1bBody, boxB2aBody,boxB2bBody 
 let boxC1aBody,boxC1bBody, boxC2aBody,boxC2bBody 
 let carBody
 let gripperABody, gripperA2Body, gripperBBody, gripperB2Body
@@ -341,11 +342,11 @@ function forward(){
     }
     flag_forward = true
     
-    if(spanWord == 1 && flag_place){
+    if((spanWord == 1 || spanWord == 11 || spanWord == 12 || spanWord == 13) && flag_place){
       flag_library = true
       flag_place = false
     }
-    else if(spanWord == 2 && flag_place){
+    else if((spanWord == 2 || spanWord == 21 || spanWord == 22 || spanWord == 23) && flag_place){
       flag_school = true
       flag_place = false
     }
@@ -367,7 +368,7 @@ function forward(){
     // flag_sec1 = true
     console.log('m = ', m)
     console.log('l = ', l)
-    if(flag_sec1 && flag_sec2 && spanWord == 1){
+    if(flag_sec1 && flag_sec2 && (spanWord == 1 || spanWord == 11 || spanWord == 12 || spanWord == 13)){
       console.log("spanWord == 1")
       flag_sec2 = false
       // flag_spanWord = true
@@ -391,11 +392,25 @@ function forward(){
         turn_path.pop();
       }
 
-      map[m][map[m].indexOf(2)] = 1
-      map[l][map[l].indexOf(4)] = 2
-      map[9][0] = 4
+
+      map =  [[0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+              [0, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [4, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];//park:(3, 3);
+
+      
+      // map[m][map[m].indexOf(2)] = 1
+      // map[l][map[l].indexOf(4)] = 2
+      // map[9][0] = 4
     }
-    else if(flag_sec1 && flag_sec2 && spanWord == 2){
+    else if(flag_sec1 && flag_sec2 && (spanWord == 2 || spanWord == 21 || spanWord == 22 || spanWord == 23)){
       console.log("spanWord == 2")
       flag_sec2 = false
       // flag_spanWord = true
@@ -419,9 +434,22 @@ function forward(){
         turn_path.pop();
       }
 
-      map[m][map[m].indexOf(2)] = 1
-      map[l][map[l].indexOf(4)] = 2
-      map[9][0] = 4
+      map =  [[0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0],
+              [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [4, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];//park:(3, 3);
+      
+      
+      // map[m][map[m].indexOf(2)] = 1
+      // map[l][map[l].indexOf(4)] = 2
+      // map[9][0] = 4
       
     }
     else if(flag_sec1 && flag_sec2 && (spanWord == 3 || spanWord == 31 || spanWord == 32 || spanWord == 33)){
@@ -499,6 +527,44 @@ function forward(){
 function forward_place(){
   // console.log("turn_direction2 = ", turn_direction2)
   console.log("spanWord2 = ", spanWord)
+  if(spanWord == 11 && flag_item){
+    flag_sec3 = true
+    flag_item = false
+    map = map_supermarket
+    map[7][0] = 4
+  }
+  else if(spanWord == 12 && flag_item){
+    flag_sec3 = true
+    flag_item = false
+    map = map_supermarket
+    map[4][0] = 4
+  }
+  else if(spanWord == 13 && flag_item){
+    flag_sec3 = true
+    flag_item = false
+    map = map_supermarket
+    map[1][0] = 4
+  }
+
+  if(spanWord == 21 && flag_item){
+    flag_sec3 = true
+    flag_item = false
+    map = map_restaurant
+    map[0][1] = 4
+  }
+  else if(spanWord == 22 && flag_item){
+    flag_sec3 = true
+    flag_item = false
+    map = map_restaurant
+    map[0][4] = 4
+  }
+  else if(spanWord == 23 && flag_item){
+    flag_sec3 = true
+    flag_item = false
+    map = map_restaurant
+    map[0][7] = 4
+  }
+  
   if(spanWord == 31 && flag_item){
     flag_sec3 = true
     flag_item = false
@@ -552,14 +618,24 @@ function forward_place(){
       flag_record1 = true
     }
   
-    if(((metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=15-adjustment && metacarObj.position.z<=15+adjustment) || //park
+    if(((metacarObj.position.x<=-30+adjustment && metacarObj.position.x>=-30-adjustment) && (metacarObj.position.z>=0-adjustment && metacarObj.position.z<=0+adjustment) || //supermarket
+        (metacarObj.position.x<=-30+adjustment && metacarObj.position.x>=-30-adjustment) && (metacarObj.position.z>=40-adjustment && metacarObj.position.z<=40+adjustment) || //supermarket A1
+        (metacarObj.position.x<=-51.5+adjustment && metacarObj.position.x>=-51.5-adjustment) && (metacarObj.position.z>=40-adjustment && metacarObj.position.z<=40+adjustment) || //supermarket A1
+        (metacarObj.position.x<=-51.5+adjustment && metacarObj.position.x>=-51.5-adjustment) && (metacarObj.position.z>=0-adjustment && metacarObj.position.z<=0+adjustment) || //supermarket A2
+        (metacarObj.position.x<=-30+adjustment && metacarObj.position.x>=-30-adjustment) && (metacarObj.position.z>=-40-adjustment && metacarObj.position.z<=-40+adjustment) || //supermarket A3
+        (metacarObj.position.x<=-51.5+adjustment && metacarObj.position.x>=-51.5-adjustment) && (metacarObj.position.z>=-40-adjustment && metacarObj.position.z<=-40+adjustment) || //supermarket A3
+        (metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=-15-adjustment && metacarObj.position.z<=-15+adjustment) || //restaurant
+        (metacarObj.position.x<=0+adjustment && metacarObj.position.x>=0-adjustment) && (metacarObj.position.z>=-15-adjustment && metacarObj.position.z<=-15+adjustment) || //restaurant B1
+        (metacarObj.position.x<=0+adjustment && metacarObj.position.x>=0-adjustment) && (metacarObj.position.z>=-44-adjustment && metacarObj.position.z<=-44+adjustment) || //restaurant B1
+        (metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=-44-adjustment && metacarObj.position.z<=-44+adjustment) || //restaurant B2
+        (metacarObj.position.x<=60+adjustment && metacarObj.position.x>=60-adjustment) && (metacarObj.position.z>=-15-adjustment && metacarObj.position.z<=-15+adjustment) || //restaurant B3
+        (metacarObj.position.x<=60+adjustment && metacarObj.position.x>=60-adjustment) && (metacarObj.position.z>=-44-adjustment && metacarObj.position.z<=-44+adjustment) || //restaurant B3
+        (metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=15-adjustment && metacarObj.position.z<=15+adjustment) || //park
         (metacarObj.position.x<=60+adjustment && metacarObj.position.x>=60-adjustment) && (metacarObj.position.z>=15-adjustment && metacarObj.position.z<=15+adjustment) || //park C1
         (metacarObj.position.x<=60+adjustment && metacarObj.position.x>=60-adjustment) && (metacarObj.position.z>=44-adjustment && metacarObj.position.z<=44+adjustment) || //park C1
         (metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=44-adjustment && metacarObj.position.z<=44+adjustment) || //park C2
         (metacarObj.position.x<=0+adjustment && metacarObj.position.x>=0-adjustment) && (metacarObj.position.z>=15-adjustment && metacarObj.position.z<=15+adjustment) || //park C3
-        (metacarObj.position.x<=0+adjustment && metacarObj.position.x>=0-adjustment) && (metacarObj.position.z>=44-adjustment && metacarObj.position.z<=44+adjustment) || //park C3
-        (metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=0-adjustment && metacarObj.position.z<=0+adjustment) || //library
-        (metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=-15-adjustment && metacarObj.position.z<=-15+adjustment)) //school
+        (metacarObj.position.x<=0+adjustment && metacarObj.position.x>=0-adjustment) && (metacarObj.position.z>=44-adjustment && metacarObj.position.z<=44+adjustment)) //park C3
         && flag_record1){
       console.log('stttttttttttttttoooop')
       flag_forward = false
@@ -602,167 +678,453 @@ function forward_place(){
       metacarObj.position.z = metacarObj.position.z + 0.5
     }
   
-  
-  
-    if(flag_record5 && flag_stop){
-      gripperABody.position.z = gripperABody.position.z + 2
-      gripperBBody.position.z = gripperBBody.position.z + 2
-      console.log("flag_record5 = ", flag_record5)
-      gripper_pos_x = gripperABody.position.x
-      gripper_pos_z = gripperABody.position.z
-      gripper_pos_y = gripperABody.position.y
-      metacar_pos_x = metacarObj.position.x
-  
-      // metacarObj_pos_z = metacarObj.position.z
-      flag_record5 = false
-      flag_step1 = true
-      // flag_stop = false
-    }
-    else if(gripperABody.position.x >= gripper_pos_x-4 && gripperBBody.position.x <= gripper_pos_x+4 && flag_step1){
-      console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeee")
-      gripperABody.position.x = gripperABody.position.x - 0.05
-      gripperBBody.position.x = gripperBBody.position.x + 0.05
-      gripperObj.gripperL.position.z = gripperObj.gripperL.position.z - 0.05
-      gripperObj.gripperR.position.z = gripperObj.gripperR.position.z + 0.05
-    }
-    else if(gripperABody.position.z <= gripper_pos_z+6 && gripperBBody.position.z <= gripper_pos_z+6 && flag_step1){
-      // console.log("ffffffffffffffffffffffffffff")
-      gripperABody.position.z = gripperABody.position.z + 0.05
-      gripperBBody.position.z = gripperBBody.position.z + 0.05
-      gripperTopBody.position.z = gripperTopBody.position.z + 0.05
-      gripperObj.clip.position.x = gripperObj.clip.position.x + 0.05
-      // gripperObj.gripperR.position.x = gripperObj.gripperR.position.x + 0.05
-      // gripperObj.base1.position.y = gripperObj.base1.position.y + 0.05
-      // gripperObj.base3.position.x = gripperObj.base3.position.x + 0.05
-      // gripperObj.base4.position.x = gripperObj.base4.position.x + 0.05
-      // gripperObj.gripperR.position.z = gripperObj.gripperR.position.z + 0.05
-    }
-    else if(flag_step1){
-      flag_step1 = false
-      flag_step2 = true
-    }
-  
-    if(gripperABody.position.x <= gripper_pos_x-2.5 && gripperBBody.position.x >= gripper_pos_x+2.5 && flag_step1 != true && flag_step2){
-      // console.log("gggggggggggggggggggggggggggg")
-      gripperABody.position.x = gripperABody.position.x + 0.05
-      gripperBBody.position.x = gripperBBody.position.x - 0.05
-      gripperObj.gripperL.position.z = gripperObj.gripperL.position.z + 0.05
-      gripperObj.gripperR.position.z = gripperObj.gripperR.position.z - 0.05
-    }
-    else if(gripperABody.position.y <= gripper_pos_y+2.5 && gripperBBody.position.y <= gripper_pos_y+2.5 && flag_step1 != true && flag_step2){
-      // console.log("gggggggggggggggggggggggggggg")
-      gripperABody.position.y = gripperABody.position.y + 0.05
-      gripperBBody.position.y = gripperBBody.position.y + 0.05
-      gripperObj.clip.position.y = gripperObj.clip.position.y + 0.05
-    }
-    // else if(gripperABody.position.y <= gripper_pos_y+10 && gripperBBody.position.y <= gripper_pos_y+10 && flag_step1 != true){
-    //   console.log("ffffffffffffffffffffffffffff")
-    //   gripperABody.position.y = gripperABody.position.y + 0.05
-    //   gripperBBody.position.y = gripperBBody.position.y + 0.05
-    //   // boxC1body.position.z = gripperABody.position.z
-    // }
-    else if(gripperABody.position.z >= gripper_pos_z+3 && gripperBBody.position.z >= gripper_pos_z+3 && flag_step1 != true && flag_step2){
-      // console.log("ffffffffffffffffffffffffffff")
-      gripperABody.position.z = gripperABody.position.z - 0.05
-      gripperBBody.position.z = gripperBBody.position.z - 0.05
-      gripperTopBody.position.z = gripperTopBody.position.z - 0.05
-      gripperObj.clip.position.x = gripperObj.clip.position.x - 0.05
-    }
-    else if(metacarObj.position.x >= metacar_pos_x-10 && flag_step1 != true && flag_step2){
-      metacarObj.position.x = metacarObj.position.x - 0.05
-      gripperABody.position.x = gripperABody.position.x - 0.05
-      gripperBBody.position.x = gripperBBody.position.x - 0.05
-      gripperTopBody.position.x = metacarObj.position.x
-      gripperObj.gripper.position.x = metacarObj.position.x
-      // console.log("step1_finish0")
-    }
-    else if(flag_step1 != true && flag_step2){
-      flag_step2 = false
-      flag_step3 = true
-      // console.log("step1_finish")
-    }
-  
-    if(gripperABody.position.z <= gripper_pos_z+6 && gripperBBody.position.z <= gripper_pos_z+6 && flag_step1 != true && flag_step2 != true && flag_step3){
-      gripperABody.position.z = gripperABody.position.z + 0.05
-      gripperBBody.position.z = gripperBBody.position.z + 0.05
-      gripperTopBody.position.z = gripperTopBody.position.z + 0.05
-      gripperObj.clip.position.x = gripperObj.clip.position.x + 0.05
-      // console.log("gripperTopBody.position.z = " , gripperTopBody.position.z)
-      // console.log("step2")
-    }
-    else if(gripperABody.position.y >= gripper_pos_y && gripperBBody.position.y >= gripper_pos_y && flag_step1 != true && flag_step2 != true && flag_step3){
-      // console.log("gggggggggggggggggggggggggggg")
-      gripperABody.position.y = gripperABody.position.y - 0.05
-      gripperBBody.position.y = gripperBBody.position.y - 0.05
-      if(gripperTopBody.position.y >= 3.6){
-        gripperTopBody.position.y = gripperTopBody.position.y - 0.05
-        gripperObj.clip.position.y = gripperObj.clip.position.y - 0.05
+
+    if(spanWord == 11 || spanWord == 12 || spanWord == 13){
+      if(flag_record5 && flag_stop){
+        // gripperABody.position.z = gripperABody.position.z - 2
+        // gripperBBody.position.z = gripperBBody.position.z - 2
+        console.log("flag_record5 = ", flag_record5)
+        gripper_pos_x = gripperABody.position.x
+        gripper_pos_z = gripperABody.position.z
+        gripper_pos_y = gripperABody.position.y
+        metacar_pos_x = metacarObj.position.x
+        metacar_pos_z = metacarObj.position.z
+    
+        // metacarObj_pos_z = metacarObj.position.z
+        flag_record5 = false
+        flag_step1 = true
+        // flag_stop = false
+      }
+      else if(gripperABody.position.z >= gripper_pos_z-4 && gripperBBody.position.z <= gripper_pos_z+4 && flag_step1){
+        console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+        gripperABody.position.z = gripperABody.position.z - 0.05
+        gripperBBody.position.z = gripperBBody.position.z + 0.05
+        gripperObj.gripperL.position.z = gripperObj.gripperL.position.z - 0.05
+        gripperObj.gripperR.position.z = gripperObj.gripperR.position.z + 0.05
+      }
+      else if(gripperABody.position.x >= gripper_pos_x-6 && gripperBBody.position.x >= gripper_pos_x-6 && flag_step1){
+        // console.log("ffffffffffffffffffffffffffff")
+        gripperABody.position.x = gripperABody.position.x - 0.05
+        gripperBBody.position.x = gripperBBody.position.x - 0.05
+        gripperTopBody.position.x = gripperTopBody.position.x - 0.05
+        gripperObj.clip.position.x = gripperObj.clip.position.x + 0.05
+        // gripperObj.gripperR.position.x = gripperObj.gripperR.position.x + 0.05
+        // gripperObj.base1.position.y = gripperObj.base1.position.y + 0.05
+        // gripperObj.base3.position.x = gripperObj.base3.position.x + 0.05
+        // gripperObj.base4.position.x = gripperObj.base4.position.x + 0.05
+        // gripperObj.gripperR.position.z = gripperObj.gripperR.position.z + 0.05
+      }
+      else if(flag_step1){
+        flag_step1 = false
+        flag_step2 = true
+      }
+    
+      if(gripperABody.position.z <= gripper_pos_z-2.5 && gripperBBody.position.z >= gripper_pos_z+2.5 && flag_step1 != true && flag_step2){
+        // console.log("gggggggggggggggggggggggggggg")
+        gripperABody.position.z = gripperABody.position.z + 0.05
+        gripperBBody.position.z = gripperBBody.position.z - 0.05
+        gripperObj.gripperL.position.z = gripperObj.gripperL.position.z + 0.05
+        gripperObj.gripperR.position.z = gripperObj.gripperR.position.z - 0.05
+      }
+      else if(gripperABody.position.y <= gripper_pos_y+2.5 && gripperBBody.position.y <= gripper_pos_y+2.5 && flag_step1 != true && flag_step2){
+        // console.log("gggggggggggggggggggggggggggg")
+        gripperABody.position.y = gripperABody.position.y + 0.05
+        gripperBBody.position.y = gripperBBody.position.y + 0.05
+        gripperObj.clip.position.y = gripperObj.clip.position.y + 0.05
+      }
+      // else if(gripperABody.position.y <= gripper_pos_y+10 && gripperBBody.position.y <= gripper_pos_y+10 && flag_step1 != true){
+      //   console.log("ffffffffffffffffffffffffffff")
+      //   gripperABody.position.y = gripperABody.position.y + 0.05
+      //   gripperBBody.position.y = gripperBBody.position.y + 0.05
+      //   // boxC1body.position.z = gripperABody.position.z
+      // }
+      else if(gripperABody.position.x <= gripper_pos_x-3 && gripperBBody.position.x <= gripper_pos_x-3 && flag_step1 != true && flag_step2){
+        // console.log("ffffffffffffffffffffffffffff")
+        gripperABody.position.x = gripperABody.position.x + 0.05
+        gripperBBody.position.x = gripperBBody.position.x + 0.05
+        gripperTopBody.position.x = gripperTopBody.position.x + 0.05
+        gripperObj.clip.position.x = gripperObj.clip.position.x - 0.05
+      }
+      else if(metacarObj.position.z >= metacar_pos_z-14 && flag_step1 != true && flag_step2){
+        metacarObj.position.z = metacarObj.position.z - 0.05
+        gripperABody.position.z = gripperABody.position.z - 0.05
+        gripperBBody.position.z = gripperBBody.position.z - 0.05
+        gripperTopBody.position.z = metacarObj.position.z
+        gripperObj.gripper.position.z = metacarObj.position.z
+        // console.log("step1_finish0")
+      }
+      else if(flag_step1 != true && flag_step2){
+        flag_step2 = false
+        flag_step3 = true
+        // console.log("step1_finish")
+      }
+    
+      if(gripperABody.position.x >= gripper_pos_x-6 && gripperBBody.position.x >= gripper_pos_x-6 && flag_step1 != true && flag_step2 != true && flag_step3){
+        gripperABody.position.x = gripperABody.position.x - 0.05
+        gripperBBody.position.x = gripperBBody.position.x - 0.05
+        gripperTopBody.position.x = gripperTopBody.position.x - 0.05
+        gripperObj.clip.position.x = gripperObj.clip.position.x + 0.05
+        // console.log("gripperTopBody.position.z = " , gripperTopBody.position.z)
+        // console.log("step2")
+      }
+      else if(gripperABody.position.y >= gripper_pos_y && gripperBBody.position.y >= gripper_pos_y && flag_step1 != true && flag_step2 != true && flag_step3){
+        // console.log("gggggggggggggggggggggggggggg")
+        gripperABody.position.y = gripperABody.position.y - 0.05
+        gripperBBody.position.y = gripperBBody.position.y - 0.05
+        if(gripperTopBody.position.y >= 3.6){
+          gripperTopBody.position.y = gripperTopBody.position.y - 0.05
+          gripperObj.clip.position.y = gripperObj.clip.position.y - 0.05
+        }
+      }
+      // else if(flag_step1 != true && flag_step2 != true && flag_step3){
+      //   flag_step3 = false
+      // }
+    
+      else if(gripperObj.clip.position.x >= 3 && flag_step1 != true && flag_step2 != true && flag_step3){
+        // console.log("gggggggggggggggggggggggggggg")
+        // gripperABody.position.z = gripperABody.position.z - 0.05
+        // gripperBBody.position.z = gripperBBody.position.z - 0.05
+        // gripperTopBody.position.z = gripperTopBody.position.z - 0.05
+        gripperObj.clip.position.x = gripperObj.clip.position.x - 0.05
+        // if(gripperTopBody.position.y >= 3.6){
+        //   gripperTopBody.position.y = gripperTopBody.position.y - 0.05
+        //   gripperObj.clip.position.y = gripperObj.clip.position.y - 0.05
+        // }
+      }
+      else if(((boxA1aBody.position.x>=-60-adjustment && boxA1aBody.position.x<=-60+adjustment) && (boxA1aBody.position.y>=0.5-adjustment && boxA1aBody.position.y<=0.5+adjustment) && (boxA1aBody.position.z>=25-adjustment && boxA1aBody.position.z<=25+adjustment)) ||
+              ((boxA2aBody.position.x>=-60-adjustment && boxA2aBody.position.x<=-60+adjustment) && (boxA2aBody.position.y>=0.6-adjustment && boxA2aBody.position.y<=0.6+adjustment) && (boxA2aBody.position.z>=-14.5-adjustment && boxA2aBody.position.z<=-14.5+adjustment)) ||
+              ((boxA3aBody.position.x>=-60-adjustment && boxA3aBody.position.x<=-60+adjustment) && (boxA3aBody.position.y>=0.5-adjustment && boxA3aBody.position.y<=0.5+adjustment) && (boxA3aBody.position.z>=-54.5-adjustment && boxA3aBody.position.z<=-54.5+adjustment))){
+        console.log("finishhhhhhhhhhhhhhh")
+        gripperABody.position.x = metacarObj.position.x
+        gripperABody.position.z = metacarObj.position.z
+        gripperBBody.position.x = metacarObj.position.x
+        gripperBBody.position.z = metacarObj.position.z
+        gripperTopBody.position.y = 6.1
+        gripperTopBody.position.z = metacarObj.position.z
+        flag_step1 = false
+        flag_step2 = false
+        flag_step3 = false
+        flag_sec3 = true
+        flag_forward_place = false
+        flag_backward_place = true
+        flag_record5 = true
+        flag_gripper = false
       }
     }
-    // else if(flag_step1 != true && flag_step2 != true && flag_step3){
-    //   flag_step3 = false
-    // }
-  
-    else if(gripperObj.clip.position.x >= 3 && flag_step1 != true && flag_step2 != true && flag_step3){
-      // console.log("gggggggggggggggggggggggggggg")
-      // gripperABody.position.z = gripperABody.position.z - 0.05
-      // gripperBBody.position.z = gripperBBody.position.z - 0.05
-      // gripperTopBody.position.z = gripperTopBody.position.z - 0.05
-      gripperObj.clip.position.x = gripperObj.clip.position.x - 0.05
-      // if(gripperTopBody.position.y >= 3.6){
-      //   gripperTopBody.position.y = gripperTopBody.position.y - 0.05
-      //   gripperObj.clip.position.y = gripperObj.clip.position.y - 0.05
+    else if(spanWord == 21 || spanWord == 22 || spanWord == 23){
+      if(flag_record5 && flag_stop){
+        gripperABody.position.z = gripperABody.position.z - 2
+        gripperBBody.position.z = gripperBBody.position.z - 2
+        console.log("flag_record5 = ", flag_record5)
+        gripper_pos_x = gripperABody.position.x
+        gripper_pos_z = gripperABody.position.z
+        gripper_pos_y = gripperABody.position.y
+        metacar_pos_x = metacarObj.position.x
+    
+        // metacarObj_pos_z = metacarObj.position.z
+        flag_record5 = false
+        flag_step1 = true
+        // flag_stop = false
+      }
+      else if(gripperABody.position.x >= gripper_pos_x-4 && gripperBBody.position.x <= gripper_pos_x+4 && flag_step1){
+        console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+        gripperABody.position.x = gripperABody.position.x - 0.05
+        gripperBBody.position.x = gripperBBody.position.x + 0.05
+        gripperObj.gripperL.position.z = gripperObj.gripperL.position.z - 0.05
+        gripperObj.gripperR.position.z = gripperObj.gripperR.position.z + 0.05
+      }
+      else if(gripperABody.position.z >= gripper_pos_z-6 && gripperBBody.position.z >= gripper_pos_z-6 && flag_step1){
+        // console.log("ffffffffffffffffffffffffffff")
+        gripperABody.position.z = gripperABody.position.z - 0.05
+        gripperBBody.position.z = gripperBBody.position.z - 0.05
+        gripperTopBody.position.z = gripperTopBody.position.z - 0.05
+        gripperObj.clip.position.x = gripperObj.clip.position.x + 0.05
+        // gripperObj.gripperR.position.x = gripperObj.gripperR.position.x + 0.05
+        // gripperObj.base1.position.y = gripperObj.base1.position.y + 0.05
+        // gripperObj.base3.position.x = gripperObj.base3.position.x + 0.05
+        // gripperObj.base4.position.x = gripperObj.base4.position.x + 0.05
+        // gripperObj.gripperR.position.z = gripperObj.gripperR.position.z + 0.05
+      }
+      else if(flag_step1){
+        flag_step1 = false
+        flag_step2 = true
+      }
+    
+      if(gripperABody.position.x <= gripper_pos_x-2.5 && gripperBBody.position.x >= gripper_pos_x+2.5 && flag_step1 != true && flag_step2){
+        // console.log("gggggggggggggggggggggggggggg")
+        gripperABody.position.x = gripperABody.position.x + 0.05
+        gripperBBody.position.x = gripperBBody.position.x - 0.05
+        gripperObj.gripperL.position.z = gripperObj.gripperL.position.z + 0.05
+        gripperObj.gripperR.position.z = gripperObj.gripperR.position.z - 0.05
+      }
+      else if(gripperABody.position.y <= gripper_pos_y+2.5 && gripperBBody.position.y <= gripper_pos_y+2.5 && flag_step1 != true && flag_step2){
+        // console.log("gggggggggggggggggggggggggggg")
+        gripperABody.position.y = gripperABody.position.y + 0.05
+        gripperBBody.position.y = gripperBBody.position.y + 0.05
+        gripperObj.clip.position.y = gripperObj.clip.position.y + 0.05
+      }
+      // else if(gripperABody.position.y <= gripper_pos_y+10 && gripperBBody.position.y <= gripper_pos_y+10 && flag_step1 != true){
+      //   console.log("ffffffffffffffffffffffffffff")
+      //   gripperABody.position.y = gripperABody.position.y + 0.05
+      //   gripperBBody.position.y = gripperBBody.position.y + 0.05
+      //   // boxC1body.position.z = gripperABody.position.z
       // }
+      else if(gripperABody.position.z <= gripper_pos_z-3 && gripperBBody.position.z <= gripper_pos_z-3 && flag_step1 != true && flag_step2){
+        // console.log("ffffffffffffffffffffffffffff")
+        gripperABody.position.z = gripperABody.position.z + 0.05
+        gripperBBody.position.z = gripperBBody.position.z + 0.05
+        gripperTopBody.position.z = gripperTopBody.position.z + 0.05
+        gripperObj.clip.position.x = gripperObj.clip.position.x - 0.05
+      }
+      else if(metacarObj.position.x <= metacar_pos_x+10 && flag_step1 != true && flag_step2){
+        metacarObj.position.x = metacarObj.position.x + 0.05
+        gripperABody.position.x = gripperABody.position.x + 0.05
+        gripperBBody.position.x = gripperBBody.position.x + 0.05
+        gripperTopBody.position.x = metacarObj.position.x
+        gripperObj.gripper.position.x = metacarObj.position.x
+        // console.log("step1_finish0")
+      }
+      else if(flag_step1 != true && flag_step2){
+        flag_step2 = false
+        flag_step3 = true
+        // console.log("step1_finish")
+      }
+    
+      if(gripperABody.position.z >= gripper_pos_z-6 && gripperBBody.position.z >= gripper_pos_z-6 && flag_step1 != true && flag_step2 != true && flag_step3){
+        gripperABody.position.z = gripperABody.position.z - 0.05
+        gripperBBody.position.z = gripperBBody.position.z - 0.05
+        gripperTopBody.position.z = gripperTopBody.position.z - 0.05
+        gripperObj.clip.position.x = gripperObj.clip.position.x + 0.05
+        // console.log("gripperTopBody.position.z = " , gripperTopBody.position.z)
+        // console.log("step2")
+      }
+      else if(gripperABody.position.y >= gripper_pos_y && gripperBBody.position.y >= gripper_pos_y && flag_step1 != true && flag_step2 != true && flag_step3){
+        // console.log("gggggggggggggggggggggggggggg")
+        gripperABody.position.y = gripperABody.position.y - 0.05
+        gripperBBody.position.y = gripperBBody.position.y - 0.05
+        if(gripperTopBody.position.y >= 3.6){
+          gripperTopBody.position.y = gripperTopBody.position.y - 0.05
+          gripperObj.clip.position.y = gripperObj.clip.position.y - 0.05
+        }
+      }
+      // else if(flag_step1 != true && flag_step2 != true && flag_step3){
+      //   flag_step3 = false
+      // }
+    
+      else if(gripperObj.clip.position.x >= 3 && flag_step1 != true && flag_step2 != true && flag_step3){
+        // console.log("gggggggggggggggggggggggggggg")
+        // gripperABody.position.z = gripperABody.position.z - 0.05
+        // gripperBBody.position.z = gripperBBody.position.z - 0.05
+        // gripperTopBody.position.z = gripperTopBody.position.z - 0.05
+        gripperObj.clip.position.x = gripperObj.clip.position.x - 0.05
+        // if(gripperTopBody.position.y >= 3.6){
+        //   gripperTopBody.position.y = gripperTopBody.position.y - 0.05
+        //   gripperObj.clip.position.y = gripperObj.clip.position.y - 0.05
+        // }
+      }
+      else if(((boxB1aBody.position.x>=10-adjustment && boxB1aBody.position.x<=10+adjustment) && (boxB1aBody.position.y>=0.5-adjustment && boxB1aBody.position.y<=0.5+adjustment) && (boxB1aBody.position.z>=-54-adjustment && boxB1aBody.position.z<=-54+adjustment)) ||
+              ((boxB2aBody.position.x>=39.5-adjustment && boxB2aBody.position.x<=39.5+adjustment) && (boxB2aBody.position.y>=0.6-adjustment && boxB2aBody.position.y<=0.6+adjustment) && (boxB2aBody.position.z>=-54-adjustment && boxB2aBody.position.z<=-54+adjustment)) ||
+              ((boxB3aBody.position.x>=70-adjustment && boxB3aBody.position.x<=70+adjustment) && (boxB3aBody.position.y>=0.5-adjustment && boxB3aBody.position.y<=0.5+adjustment) && (boxB3aBody.position.z>=-54-adjustment && boxB3aBody.position.z<=-54+adjustment))){
+        console.log("finishhhhhhhhhhhhhhh")
+        gripperABody.position.x = metacarObj.position.x
+        gripperABody.position.z = metacarObj.position.z
+        gripperBBody.position.x = metacarObj.position.x
+        gripperBBody.position.z = metacarObj.position.z
+        gripperTopBody.position.y = 6.1
+        gripperTopBody.position.z = metacarObj.position.z
+        flag_step1 = false
+        flag_step2 = false
+        flag_step3 = false
+        flag_sec3 = true
+        flag_forward_place = false
+        flag_backward_place = true
+        flag_record5 = true
+        flag_gripper = false
+      }
     }
-    else if(((boxC1aBody.position.x>=50-adjustment && boxC1aBody.position.x<=50+adjustment) && (boxC1aBody.position.y>=0.5-adjustment && boxC1aBody.position.y<=0.5+adjustment) && (boxC1aBody.position.z>=54-adjustment && boxC1aBody.position.z<=54+adjustment)) ||
-            ((boxC2aBody.position.x>=19.5-adjustment && boxC2aBody.position.x<=19.5+adjustment) && (boxC2aBody.position.y>=0.5-adjustment && boxC2aBody.position.y<=0.5+adjustment) && (boxC2aBody.position.z>=54-adjustment && boxC2aBody.position.z<=54+adjustment)) ||
-            ((boxC3aBody.position.x>=-10-adjustment && boxC3aBody.position.x<=-10+adjustment) && (boxC3aBody.position.y>=0.5-adjustment && boxC3aBody.position.y<=0.5+adjustment) && (boxC3aBody.position.z>=54-adjustment && boxC3aBody.position.z<=54+adjustment))){
-      console.log("finishhhhhhhhhhhhhhh")
-      gripperABody.position.x = metacarObj.position.x
-      gripperABody.position.z = metacarObj.position.z
-      gripperBBody.position.x = metacarObj.position.x
-      gripperBBody.position.z = metacarObj.position.z
-      gripperTopBody.position.y = 6.1
-      gripperTopBody.position.z = metacarObj.position.z
-      flag_step1 = false
-      flag_step2 = false
-      flag_step3 = false
-      flag_sec3 = true
-      flag_forward_place = false
-      flag_backward_place = true
-      flag_record5 = true
-      flag_gripper = false
+    else if(spanWord == 31 || spanWord == 32 || spanWord == 33){
+      if(flag_record5 && flag_stop){
+        gripperABody.position.z = gripperABody.position.z + 2
+        gripperBBody.position.z = gripperBBody.position.z + 2
+        console.log("flag_record5 = ", flag_record5)
+        gripper_pos_x = gripperABody.position.x
+        gripper_pos_z = gripperABody.position.z
+        gripper_pos_y = gripperABody.position.y
+        metacar_pos_x = metacarObj.position.x
+    
+        // metacarObj_pos_z = metacarObj.position.z
+        flag_record5 = false
+        flag_step1 = true
+        // flag_stop = false
+      }
+      else if(gripperABody.position.x >= gripper_pos_x-4 && gripperBBody.position.x <= gripper_pos_x+4 && flag_step1){
+        console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+        gripperABody.position.x = gripperABody.position.x - 0.05
+        gripperBBody.position.x = gripperBBody.position.x + 0.05
+        gripperObj.gripperL.position.z = gripperObj.gripperL.position.z - 0.05
+        gripperObj.gripperR.position.z = gripperObj.gripperR.position.z + 0.05
+      }
+      else if(gripperABody.position.z <= gripper_pos_z+6 && gripperBBody.position.z <= gripper_pos_z+6 && flag_step1){
+        // console.log("ffffffffffffffffffffffffffff")
+        gripperABody.position.z = gripperABody.position.z + 0.05
+        gripperBBody.position.z = gripperBBody.position.z + 0.05
+        gripperTopBody.position.z = gripperTopBody.position.z + 0.05
+        gripperObj.clip.position.x = gripperObj.clip.position.x + 0.05
+        // gripperObj.gripperR.position.x = gripperObj.gripperR.position.x + 0.05
+        // gripperObj.base1.position.y = gripperObj.base1.position.y + 0.05
+        // gripperObj.base3.position.x = gripperObj.base3.position.x + 0.05
+        // gripperObj.base4.position.x = gripperObj.base4.position.x + 0.05
+        // gripperObj.gripperR.position.z = gripperObj.gripperR.position.z + 0.05
+      }
+      else if(flag_step1){
+        flag_step1 = false
+        flag_step2 = true
+      }
+    
+      if(gripperABody.position.x <= gripper_pos_x-2.5 && gripperBBody.position.x >= gripper_pos_x+2.5 && flag_step1 != true && flag_step2){
+        // console.log("gggggggggggggggggggggggggggg")
+        gripperABody.position.x = gripperABody.position.x + 0.05
+        gripperBBody.position.x = gripperBBody.position.x - 0.05
+        gripperObj.gripperL.position.z = gripperObj.gripperL.position.z + 0.05
+        gripperObj.gripperR.position.z = gripperObj.gripperR.position.z - 0.05
+      }
+      else if(gripperABody.position.y <= gripper_pos_y+2.5 && gripperBBody.position.y <= gripper_pos_y+2.5 && flag_step1 != true && flag_step2){
+        // console.log("gggggggggggggggggggggggggggg")
+        gripperABody.position.y = gripperABody.position.y + 0.05
+        gripperBBody.position.y = gripperBBody.position.y + 0.05
+        gripperObj.clip.position.y = gripperObj.clip.position.y + 0.05
+      }
+      // else if(gripperABody.position.y <= gripper_pos_y+10 && gripperBBody.position.y <= gripper_pos_y+10 && flag_step1 != true){
+      //   console.log("ffffffffffffffffffffffffffff")
+      //   gripperABody.position.y = gripperABody.position.y + 0.05
+      //   gripperBBody.position.y = gripperBBody.position.y + 0.05
+      //   // boxC1body.position.z = gripperABody.position.z
+      // }
+      else if(gripperABody.position.z >= gripper_pos_z+3 && gripperBBody.position.z >= gripper_pos_z+3 && flag_step1 != true && flag_step2){
+        // console.log("ffffffffffffffffffffffffffff")
+        gripperABody.position.z = gripperABody.position.z - 0.05
+        gripperBBody.position.z = gripperBBody.position.z - 0.05
+        gripperTopBody.position.z = gripperTopBody.position.z - 0.05
+        gripperObj.clip.position.x = gripperObj.clip.position.x - 0.05
+      }
+      else if(metacarObj.position.x >= metacar_pos_x-10 && flag_step1 != true && flag_step2){
+        metacarObj.position.x = metacarObj.position.x - 0.05
+        gripperABody.position.x = gripperABody.position.x - 0.05
+        gripperBBody.position.x = gripperBBody.position.x - 0.05
+        gripperTopBody.position.x = metacarObj.position.x
+        gripperObj.gripper.position.x = metacarObj.position.x
+        // console.log("step1_finish0")
+      }
+      else if(flag_step1 != true && flag_step2){
+        flag_step2 = false
+        flag_step3 = true
+        // console.log("step1_finish")
+      }
+    
+      if(gripperABody.position.z <= gripper_pos_z+6 && gripperBBody.position.z <= gripper_pos_z+6 && flag_step1 != true && flag_step2 != true && flag_step3){
+        gripperABody.position.z = gripperABody.position.z + 0.05
+        gripperBBody.position.z = gripperBBody.position.z + 0.05
+        gripperTopBody.position.z = gripperTopBody.position.z + 0.05
+        gripperObj.clip.position.x = gripperObj.clip.position.x + 0.05
+        // console.log("gripperTopBody.position.z = " , gripperTopBody.position.z)
+        // console.log("step2")
+      }
+      else if(gripperABody.position.y >= gripper_pos_y && gripperBBody.position.y >= gripper_pos_y && flag_step1 != true && flag_step2 != true && flag_step3){
+        // console.log("gggggggggggggggggggggggggggg")
+        gripperABody.position.y = gripperABody.position.y - 0.05
+        gripperBBody.position.y = gripperBBody.position.y - 0.05
+        if(gripperTopBody.position.y >= 3.6){
+          gripperTopBody.position.y = gripperTopBody.position.y - 0.05
+          gripperObj.clip.position.y = gripperObj.clip.position.y - 0.05
+        }
+      }
+      // else if(flag_step1 != true && flag_step2 != true && flag_step3){
+      //   flag_step3 = false
+      // }
+    
+      else if(gripperObj.clip.position.x >= 3 && flag_step1 != true && flag_step2 != true && flag_step3){
+        // console.log("gggggggggggggggggggggggggggg")
+        // gripperABody.position.z = gripperABody.position.z - 0.05
+        // gripperBBody.position.z = gripperBBody.position.z - 0.05
+        // gripperTopBody.position.z = gripperTopBody.position.z - 0.05
+        gripperObj.clip.position.x = gripperObj.clip.position.x - 0.05
+        // if(gripperTopBody.position.y >= 3.6){
+        //   gripperTopBody.position.y = gripperTopBody.position.y - 0.05
+        //   gripperObj.clip.position.y = gripperObj.clip.position.y - 0.05
+        // }
+      }
+      else if(((boxC1aBody.position.x>=50-adjustment && boxC1aBody.position.x<=50+adjustment) && (boxC1aBody.position.y>=0.5-adjustment && boxC1aBody.position.y<=0.5+adjustment) && (boxC1aBody.position.z>=54-adjustment && boxC1aBody.position.z<=54+adjustment)) ||
+              ((boxC2aBody.position.x>=19.5-adjustment && boxC2aBody.position.x<=19.5+adjustment) && (boxC2aBody.position.y>=0.5-adjustment && boxC2aBody.position.y<=0.5+adjustment) && (boxC2aBody.position.z>=54-adjustment && boxC2aBody.position.z<=54+adjustment)) ||
+              ((boxC3aBody.position.x>=-10-adjustment && boxC3aBody.position.x<=-10+adjustment) && (boxC3aBody.position.y>=0.5-adjustment && boxC3aBody.position.y<=0.5+adjustment) && (boxC3aBody.position.z>=54-adjustment && boxC3aBody.position.z<=54+adjustment))){
+        console.log("finishhhhhhhhhhhhhhh")
+        gripperABody.position.x = metacarObj.position.x
+        gripperABody.position.z = metacarObj.position.z
+        gripperBBody.position.x = metacarObj.position.x
+        gripperBBody.position.z = metacarObj.position.z
+        gripperTopBody.position.y = 6.1
+        gripperTopBody.position.z = metacarObj.position.z
+        flag_step1 = false
+        flag_step2 = false
+        flag_step3 = false
+        flag_sec3 = true
+        flag_forward_place = false
+        flag_backward_place = true
+        flag_record5 = true
+        flag_gripper = false
+      }
     }
+  
+    
   }
 
   // console.log("metacarObj.position.x = ", metacarObj.position.x)
   // console.log("metacarObj.position.z = ", metacarObj.position.z)
   // console.log("flag_backward_place = ", flag_backward_place)
-  console.log("boxC3aBody.position.x = ", boxC3aBody.position.x)
-  console.log("boxC3aBody.position.y = ", boxC3aBody.position.y)
-  console.log("boxC3aBody.position.z = ", boxC3aBody.position.z)
+  console.log("boxB2aBody.position.x = ", boxB2aBody.position.x)
+  console.log("boxB2aBody.position.y = ", boxB2aBody.position.y)
+  console.log("boxB2aBody.position.z = ", boxB2aBody.position.z)
 
-  if(flag_step1){
-    gripperA2Body.position.x = gripperABody.position.x
+  if(spanWord == 11 || spanWord == 12 || spanWord == 13){
+    gripperA2Body.position.x = gripperABody.position.x-5.5
     gripperA2Body.position.y = gripperABody.position.y
-    gripperA2Body.position.z = gripperABody.position.z+5.5
+    gripperA2Body.position.z = gripperABody.position.z
     gripperA3Body.position.x = gripperABody.position.x
     gripperA3Body.position.y = gripperABody.position.y
     gripperA3Body.position.z = gripperABody.position.z-0.5
-    gripperA4Body.position.x = gripperABody.position.x-0.5
+    gripperA4Body.position.x = gripperABody.position.x-3
     gripperA4Body.position.y = gripperABody.position.y
-    gripperA4Body.position.z = gripperABody.position.z+3
-    gripperB2Body.position.x = gripperBBody.position.x
+    gripperA4Body.position.z = gripperABody.position.z
+    gripperB2Body.position.x = gripperBBody.position.x-5.5
     gripperB2Body.position.y = gripperBBody.position.y
-    gripperB2Body.position.z = gripperBBody.position.z+5.5
+    gripperB2Body.position.z = gripperBBody.position.z
     gripperB3Body.position.x = gripperBBody.position.x
     gripperB3Body.position.y = gripperBBody.position.y
     gripperB3Body.position.z = gripperBBody.position.z-0.5
-    gripperB4Body.position.x = gripperBBody.position.x+0.5
+    gripperB4Body.position.x = gripperBBody.position.x-3
     gripperB4Body.position.y = gripperBBody.position.y
-    gripperB4Body.position.z = gripperBBody.position.z+3
+    gripperB4Body.position.z = gripperBBody.position.z
   }
-  else{
+  else if(spanWord == 21 || spanWord == 22 || spanWord == 23){
+    gripperA2Body.position.x = gripperABody.position.x
+    gripperA2Body.position.y = gripperABody.position.y
+    gripperA2Body.position.z = gripperABody.position.z+5.5
+    gripperA3Body.position.x = gripperABody.position.x
+    gripperA3Body.position.y = gripperABody.position.y
+    gripperA3Body.position.z = gripperABody.position.z+0.5
+    gripperA4Body.position.x = gripperABody.position.x-0.5
+    gripperA4Body.position.y = gripperABody.position.y
+    gripperA4Body.position.z = gripperABody.position.z-2.5
+    gripperB2Body.position.x = gripperBBody.position.x
+    gripperB2Body.position.y = gripperBBody.position.y
+    gripperB2Body.position.z = gripperBBody.position.z-5.5
+    gripperB3Body.position.x = gripperBBody.position.x
+    gripperB3Body.position.y = gripperBBody.position.y
+    gripperB3Body.position.z = gripperBBody.position.z+0.5
+    gripperB4Body.position.x = gripperBBody.position.x+0.5
+    gripperB4Body.position.y = gripperBBody.position.y
+    gripperB4Body.position.z = gripperBBody.position.z-2.5
+  }
+  else if(spanWord == 31 || spanWord == 32 || spanWord == 33){
     gripperA2Body.position.x = gripperABody.position.x
     gripperA2Body.position.y = gripperABody.position.y
     gripperA2Body.position.z = gripperABody.position.z+5.5
@@ -781,10 +1143,6 @@ function forward_place(){
     gripperB4Body.position.x = gripperBBody.position.x+0.5
     gripperB4Body.position.y = gripperBBody.position.y
     gripperB4Body.position.z = gripperBBody.position.z+3
-    
-
-    // gripperTopBody.position.x = metacarObj.position.x
-    // gripperTopBody.position.z = metacarObj.position.z
   }
   // gripperTopBody.position.x = metacarObj.position.x
   // gripperTopBody.position.y = metacarObj.position.y
@@ -834,12 +1192,21 @@ function backward_place(){
       }
     }
     // map[][] = 2
-    if(spanWord==31 || spanWord==32 || spanWord==33){
+    if(spanWord==11 || spanWord==12 || spanWord==13){
+      map[4][3] = 4
+      turn_path2.push(3)
+    }
+    else if(spanWord==21 || spanWord==22 || spanWord==23){
+      map[3][4] = 4
+      turn_path2.push(2)
+    }
+    else if(spanWord==31 || spanWord==32 || spanWord==33){
       map[0][4] = 4
+      turn_path2.push(0)
     }
     map[n][map[n].indexOf(4)] = 2
     // map = map_park2
-    // map = [[1, 1, 1, 1, 2, 1, 1, 1, 1],
+    // map =[[1, 1, 1, 1, 2, 1, 1, 1, 1],
     //       [0, 0, 1, 0, 0, 1, 0, 0, 1],
     //       [0, 0, 1, 0, 0, 1, 0, 0, 1],
     //       [0, 1, 1, 0, 1, 1, 0, 4, 1]];
@@ -847,7 +1214,7 @@ function backward_place(){
     console.log("flag_sec3")
     row = map.length;
     col = map[0].length;
-    turn_path2.push(0)
+    
   }
   console.log("n = ", n)
   console.log(map)
@@ -856,15 +1223,25 @@ function backward_place(){
     flag_record1 = true
   }
 
-  if(((metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=15-adjustment && metacarObj.position.z<=15+adjustment) || //park
-      (metacarObj.position.x<=60+adjustment && metacarObj.position.x>=60-adjustment) && (metacarObj.position.z>=15-adjustment && metacarObj.position.z<=15+adjustment) || //park C1
-      (metacarObj.position.x<=60+adjustment && metacarObj.position.x>=60-adjustment) && (metacarObj.position.z>=44-adjustment && metacarObj.position.z<=44+adjustment) || //park C1
-      (metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=44-adjustment && metacarObj.position.z<=44+adjustment) || //park C2
-      (metacarObj.position.x<=0+adjustment && metacarObj.position.x>=0-adjustment) && (metacarObj.position.z>=15-adjustment && metacarObj.position.z<=15+adjustment) || //park C3
-      (metacarObj.position.x<=0+adjustment && metacarObj.position.x>=0-adjustment) && (metacarObj.position.z>=44-adjustment && metacarObj.position.z<=44+adjustment) || //park C3
-      (metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=0-adjustment && metacarObj.position.z<=0+adjustment) || //library
-      (metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=-15-adjustment && metacarObj.position.z<=-15+adjustment)) //school
-      && flag_record1){
+  if(((metacarObj.position.x<=-30+adjustment && metacarObj.position.x>=-30-adjustment) && (metacarObj.position.z>=0-adjustment && metacarObj.position.z<=0+adjustment) || //supermarket
+        (metacarObj.position.x<=-30+adjustment && metacarObj.position.x>=-30-adjustment) && (metacarObj.position.z>=40-adjustment && metacarObj.position.z<=40+adjustment) || //supermarket A1
+        (metacarObj.position.x<=-51.5+adjustment && metacarObj.position.x>=-51.5-adjustment) && (metacarObj.position.z>=40-adjustment && metacarObj.position.z<=40+adjustment) || //supermarket A1
+        (metacarObj.position.x<=-51.5+adjustment && metacarObj.position.x>=-51.5-adjustment) && (metacarObj.position.z>=0-adjustment && metacarObj.position.z<=0+adjustment) || //supermarket A2
+        (metacarObj.position.x<=-30+adjustment && metacarObj.position.x>=-30-adjustment) && (metacarObj.position.z>=-40-adjustment && metacarObj.position.z<=-40+adjustment) || //supermarket A3
+        (metacarObj.position.x<=-51.5+adjustment && metacarObj.position.x>=-51.5-adjustment) && (metacarObj.position.z>=-40-adjustment && metacarObj.position.z<=-40+adjustment) || //supermarket A3
+        (metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=-15-adjustment && metacarObj.position.z<=-15+adjustment) || //restaurant
+        (metacarObj.position.x<=0+adjustment && metacarObj.position.x>=0-adjustment) && (metacarObj.position.z>=-15-adjustment && metacarObj.position.z<=-15+adjustment) || //restaurant B1
+        (metacarObj.position.x<=0+adjustment && metacarObj.position.x>=0-adjustment) && (metacarObj.position.z>=-44-adjustment && metacarObj.position.z<=-44+adjustment) || //restaurant B1
+        (metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=-44-adjustment && metacarObj.position.z<=-44+adjustment) || //restaurant B2
+        (metacarObj.position.x<=60+adjustment && metacarObj.position.x>=60-adjustment) && (metacarObj.position.z>=-15-adjustment && metacarObj.position.z<=-15+adjustment) || //restaurant B3
+        (metacarObj.position.x<=60+adjustment && metacarObj.position.x>=60-adjustment) && (metacarObj.position.z>=-44-adjustment && metacarObj.position.z<=-44+adjustment) || //restaurant B3
+        (metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=15-adjustment && metacarObj.position.z<=15+adjustment) || //park
+        (metacarObj.position.x<=60+adjustment && metacarObj.position.x>=60-adjustment) && (metacarObj.position.z>=15-adjustment && metacarObj.position.z<=15+adjustment) || //park C1
+        (metacarObj.position.x<=60+adjustment && metacarObj.position.x>=60-adjustment) && (metacarObj.position.z>=44-adjustment && metacarObj.position.z<=44+adjustment) || //park C1
+        (metacarObj.position.x<=30+adjustment && metacarObj.position.x>=30-adjustment) && (metacarObj.position.z>=44-adjustment && metacarObj.position.z<=44+adjustment) || //park C2
+        (metacarObj.position.x<=0+adjustment && metacarObj.position.x>=0-adjustment) && (metacarObj.position.z>=15-adjustment && metacarObj.position.z<=15+adjustment) || //park C3
+        (metacarObj.position.x<=0+adjustment && metacarObj.position.x>=0-adjustment) && (metacarObj.position.z>=44-adjustment && metacarObj.position.z<=44+adjustment)) //park C3
+        && flag_record1){
     console.log('stttttttttttttttoooop')
     flag_forward = false
     flag_turn = true
@@ -1214,6 +1591,73 @@ function render(){
 
   world.step(1/60)
 
+
+  //==================box A=================
+
+  if (boxA1a) {
+    boxA1a.position.copy(boxA1aBody.position)
+    boxA1a.quaternion.copy(boxA1aBody.quaternion)
+  }
+
+  if (boxA1b) {
+    boxA1b.position.copy(boxA1bBody.position)
+    boxA1b.quaternion.copy(boxA1bBody.quaternion)
+  }
+
+  if (boxA2a) {
+    boxA2a.position.copy(boxA2aBody.position)
+    boxA2a.quaternion.copy(boxA2aBody.quaternion)
+  }
+
+  if (boxA2b) {
+    boxA2b.position.copy(boxA2bBody.position)
+    boxA2b.quaternion.copy(boxA2bBody.quaternion)
+  }
+
+  if (boxA3a) {
+    boxA3a.position.copy(boxA3aBody.position)
+    boxA3a.quaternion.copy(boxA3aBody.quaternion)
+  }
+
+  if (boxA3b) {
+    boxA3b.position.copy(boxA3bBody.position)
+    boxA3b.quaternion.copy(boxA3bBody.quaternion)
+  }
+
+  //==================box B=================
+
+  if (boxB1a) {
+    boxB1a.position.copy(boxB1aBody.position)
+    boxB1a.quaternion.copy(boxB1aBody.quaternion)
+  }
+
+  if (boxB1b) {
+    boxB1b.position.copy(boxB1bBody.position)
+    boxB1b.quaternion.copy(boxB1bBody.quaternion)
+  }
+
+  if (boxB2a) {
+    boxB2a.position.copy(boxB2aBody.position)
+    boxB2a.quaternion.copy(boxB2aBody.quaternion)
+  }
+
+  if (boxB2b) {
+    boxB2b.position.copy(boxB2bBody.position)
+    boxB2b.quaternion.copy(boxB2bBody.quaternion)
+  }
+
+  if (boxB3a) {
+    boxB3a.position.copy(boxB3aBody.position)
+    boxB3a.quaternion.copy(boxB3aBody.quaternion)
+  }
+
+  if (boxB3b) {
+    boxB3b.position.copy(boxB3bBody.position)
+    boxB3b.quaternion.copy(boxB3bBody.quaternion)
+  }
+
+  //==================box C=================
+
   if (boxC1a) {
     boxC1a.position.copy(boxC1aBody.position)
     boxC1a.quaternion.copy(boxC1aBody.quaternion)
@@ -1300,11 +1744,11 @@ window.addEventListener('resize', function(){
 })
 
 function press(){
-  document.getElementById("spanWord").innerHTML = 3
+  document.getElementById("spanWord").innerHTML = 2
 }
 
 function press2(){
-  document.getElementById("spanWord").innerHTML = 33
+  document.getElementById("spanWord").innerHTML = 22
 }
 
 init()
