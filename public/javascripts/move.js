@@ -209,6 +209,7 @@ function init(){
   initObject()
   initPlace()
   createGripper()
+  init_background_object()
   // createMetacar()
 
   // metacarObj.position.x = -70
@@ -707,7 +708,10 @@ function forward_place(){
         gripperABody.position.x = gripperABody.position.x - 0.05
         gripperBBody.position.x = gripperBBody.position.x - 0.05
         gripperTopBody.position.x = gripperTopBody.position.x - 0.05
-        gripperObj.clip.position.x = gripperObj.clip.position.x + 0.05
+        
+        if(gripperABody.position.x >= gripper_pos_x-5 && gripperBBody.position.x >= gripper_pos_x-5){
+          gripperObj.clip.position.x = gripperObj.clip.position.x + 0.05
+        }
         // gripperObj.gripperR.position.x = gripperObj.gripperR.position.x + 0.05
         // gripperObj.base1.position.y = gripperObj.base1.position.y + 0.05
         // gripperObj.base3.position.x = gripperObj.base3.position.x + 0.05
