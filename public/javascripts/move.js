@@ -138,24 +138,24 @@ let flag_item = true
 
 // const timeStep = 1.0 / 60.0 // seconds
 
-const socket = io('http://140.125.32.138:3000')
+// const socket = io('http://140.125.32.138:3000')
 
-socket.on('connection')
+// socket.on('connection')
 
-socket.on('message', (data) => {
-    document.querySelector('h1').innerHTML = data;
-    document.getElementById('spanWord').innerHTML = data
-    // if(data == 1){
-    //   document.getElementById('spanWord').innerHTML = 1
-    // }
-    // else if(data == 2){
-    //   document.getElementById('spanWord').innerHTML = 2
-    // }
-    // else if(data == 3){  
-    //   document.getElementById('spanWord').innerHTML = 3
-    // }
+// socket.on('message', (data) => {
+//     document.querySelector('h1').innerHTML = data;
+//     document.getElementById('spanWord').innerHTML = data
+//     // if(data == 1){
+//     //   document.getElementById('spanWord').innerHTML = 1
+//     // }
+//     // else if(data == 2){
+//     //   document.getElementById('spanWord').innerHTML = 2
+//     // }
+//     // else if(data == 3){  
+//     //   document.getElementById('spanWord').innerHTML = 3
+//     // }
     
-})
+// })
 
 
 
@@ -1769,7 +1769,7 @@ function press2(){
 }
 
 function press3(){
-  document.getElementById("spanWord").innerHTML = 111
+  document.getElementById("spanWord").innerHTML = 9111
 }
 
 

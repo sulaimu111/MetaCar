@@ -1,306 +1,63 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title><%= title %></title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/109/three.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.2.0/Tween.min.js"></script>
+    <!-- <script src="https://unpkg.com/three@0.125.2/examples/jsm/loaders/OBJLoader.js"></script> -->
+    <!-- <script type="module" src="/javascripts/GLTFLoader.js"></script> -->
+    <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/FontLoader.js"></script>
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script>
+    
+    <!-- <script src="/javascripts/move.js" charset="utf-8"></script> -->
+  </head>
+  <body>
+    <div id="stats"></div>
+    <div class="h1box">
+      <img id="place">
+      <h1 id="h1Text" style="display: none;"></h1>
+      <button id="park_btn" onclick="press()">go to the park</button>
+      <button id="park_btn2" onclick="press2()">11</button>
+      <button id="park_btn3" onclick="press3()">111</button>
+    </div>
+    <span id="spanWord" style="display: none;"></span>
+    <!-- <button type="button" onclick="run()">start</button> -->
+    <script src="/javascripts/dijkstra_search.js"></script>
+    <script src="/javascripts/init_object.js"></script>
+    <script src="/javascripts/story_image.js"></script>
+    <script src="/javascripts/move.js"></script>
+    <script>
+      const socket = io('http://140.125.32.138:3000')
 
-<head>
-	<meta charset="utf-8" />
-	<title>dijkstra search</title>
-</head>
+      socket.on('connection')
 
-<body>
-	<button type="button" onclick="run()">start</button>
-	<button type="button" onclick="location.reload()">refresh</button>
-	<a id="iteration"></a>
-	<a id="panel" style="display: grid;"></a>
-
-	<script type="text/javascript">
-		const colors = ["black", "gray", "green", "yellow", "red", "purple"];
-		const pxSize = 20;
-		const timeStep = 10;
-		// 0 - obstacle; 1 - blank_1; 2 - start; 4 - goal; blank_3 = 3; blank_5 = 5;
-		const start = 2, goal = 4, obstacle = 0, blank_1 = 1; blank_3 = 3; blank_5 = 5;
-		const pathCost = [null, 1, 0, 3, 0, 5];
-		// const map = [[0, 0, 0, 4, 0, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0, 0, 0], [0, 0, 0, 1, 1, 1, 1, 1, 1], [0, 0, 0, 1, 0, 0, 0, 0, 0], [2, 1, 1, 1, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]];
-		let map = [[1, 1, 1, 1, 2, 1, 1, 1, 1],
-                [0, 0, 1, 0, 0, 1, 0, 0, 1],
-                [0, 0, 1, 0, 0, 1, 0, 0, 1],
-                [0, 1, 1, 0, 1, 1, 0, 4, 1]];
-		const row = map.length;
-		const col = map[0].length;
-		document.getElementById("panel").style.gridTemplateColumns = (pxSize + "px ").repeat(col);
-		document.getElementById("panel").style.gridTemplateRows = (pxSize + "px ").repeat(row);
-
-		//add grid - num at row * col
-		var addGridStringText = "<canvas id='myCanvas' width=" + pxSize * col + " height=" + pxSize * row + " style='position:absolute; solid #000000;'></canvas>" + "<canvas id='myCanvasForFinalPath' width=" + pxSize * col + " height=" + pxSize * row + " style='position:absolute; solid #000000;'></canvas>";
-		for (i = 0; i < row; i++) {
-			for (j = 0; j < col; j++)
-				addGridStringText += "<div row='" + i + "' col='" + j + "' id='" + i + "_" + j + "' style=\"border:1px solid white; background-color:" + colors[map[i][j]] + "\"></div>";
-		}
-		document.getElementById("panel").innerHTML = addGridStringText;
-
-		function drawLine(from, to) {
-			var c = document.getElementById("myCanvas");
-			var ctx = c.getContext("2d");
-			ctx.lineWidth = 5;
-			ctx.moveTo(pxSize * (from.colAt + 0.5), pxSize * (from.rowAt + 0.5));
-			ctx.lineTo(pxSize * (to.colAt + 0.5), pxSize * (to.rowAt + 0.5));
-			ctx.stroke();
-			// console.log(ctx)
-		}
-
-		function drawFinalPathLine(from, to) {
-			var c = document.getElementById("myCanvasForFinalPath");
-			var ctx = c.getContext("2d");
-			ctx.strokeStyle = '#cc0000';
-			ctx.lineWidth = 5;
-			ctx.moveTo(pxSize * (from.colAt + 0.5), pxSize * (from.rowAt + 0.5));
-			ctx.lineTo(pxSize * (to.colAt + 0.5), pxSize * (to.rowAt + 0.5));
-			ctx.stroke();
-		}
-
-		function Node(parent, rowat, colat, totalCost) {
-			this.parent = parent;
-			this.rowAt = rowat;
-			this.colAt = colat;
-			this.totalCost = totalCost;
-
-			if (parent != null) drawLine(parent, this);
-
-			this.getMapValue = function () {
-				return map[this.rowAt][this.colAt];
-			}
-
-			this.setParent = function (p) {
-				this.parent = p;
-			}
-			this.setTotalCost = function (cost) {
-				this.totalCost = cost;
-			}
-			this.set
-
-			//from left top and normal clock order
-			this.addNeightBor = function () {
-				rowAt = this.rowAt;
-				colAt = this.colAt;
-				// rightTop = [rowAt - 1, colAt + 1];
-				// if (rightTop[1] < col && rightTop[0] >= 0 && map[rightTop[0]][rightTop[1]] != obstacle) {
-				// 	if (getNodeFromClosed(rightTop) != null) {
-				// 		node = getNodeFromClosed(rightTop);
-				// 		costPos = map[rightTop[0]][rightTop[1]];
-				// 		if (node.totalCost > this.totalCost + costPos) {
-				// 			node.setTotalCost(this.totalCost + costPos);
-				// 			node.setParent(this);
-				// 		}
-				// 	} else {
-				// 		node = new Node(this, rightTop[0], rightTop[1], this.totalCost + pathCost[map[rightTop[0]][rightTop[1]]]);
-				// 		openList.push(node);
-				// 		createdList.push(node);
-				// 	}
-
-				// }
-
-				right = [rowAt, colAt + 1];
-				if (right[1] < col && map[right[0]][right[1]] != obstacle) {
-					if (getNodeFromClosed(right) != null) {
-						node = getNodeFromClosed(right);
-						costPos = map[right[0]][right[1]];
-						if (node.totalCost > this.totalCost + pathCost[costPos]) {
-							node.setTotalCost(this.totalCost + pathCost[costPos]);
-							node.setParent(this);
-						}
-					} else {
-						node = new Node(this, right[0], right[1], this.totalCost + pathCost[map[right[0]][right[1]]]);
-						openList.push(node);
-						createdList.push(node);
-					}
-
-				}
-
-				// rightBott = [rowAt + 1, colAt + 1];
-				// if (rightBott[0] < row && rightBott[1] < col && map[rightBott[0]][rightBott[1]] != obstacle) {
-				// 	if (getNodeFromClosed(rightBott) != null) {
-				// 		node = getNodeFromClosed(rightBott);
-				// 		costPos = map[rightBott[0]][rightBott[1]];
-				// 		if (node.totalCost > this.totalCost + costPos) {
-				// 			node.setTotalCost(this.totalCost + costPos);
-				// 			node.setParent(this);
-				// 		}
-				// 	} else {
-				// 		node = new Node(this, rightBott[0], rightBott[1], this.totalCost + pathCost[map[rightBott[0]][rightBott[1]]]);
-				// 		openList.push(node);
-				// 		createdList.push(node);
-				// 	}
-
-				// }
-
-				bott = [rowAt + 1, colAt];
-				if (bott[0] < row && map[bott[0]][bott[1]] != obstacle) {
-					if (getNodeFromClosed(bott) != null) {
-						node = getNodeFromClosed(bott);
-						costPos = map[bott[0]][bott[1]];
-						if (node.totalCost > this.totalCost + pathCost[costPos]) {
-							node.setTotalCost(this.totalCost + pathCost[costPos]);
-							node.setParent(this);
-						}
-					} else {
-						node = new Node(this, bott[0], bott[1], this.totalCost + pathCost[map[bott[0]][bott[1]]]);
-						openList.push(node);
-						createdList.push(node);
-					}
-
-				}
-
-				// leftBott = [rowAt + 1, colAt - 1];
-				// if (leftBott[1] >= 0 && leftBott[0] < row && map[leftBott[0]][leftBott[1]] != obstacle) {
-				// 	if (getNodeFromClosed(leftBott) != null) {
-				// 		node = getNodeFromClosed(leftBott);
-				// 		costPos = map[leftBott[0]][leftBott[1]];
-				// 		if (node.totalCost > this.totalCost + costPos) {
-				// 			node.setTotalCost(this.totalCost + costPos);
-				// 			node.setParent(this);
-				// 		}
-				// 	} else {
-				// 		node = new Node(this, leftBott[0], leftBott[1], this.totalCost + pathCost[map[leftBott[0]][leftBott[1]]]);
-				// 		openList.push(node);
-				// 		createdList.push(node);
-				// 	}
-
-				// }
-
-				left = [rowAt, colAt - 1];
-				if (left[1] >= 0 && map[left[0]][left[1]] != obstacle) {
-					if (getNodeFromClosed(left) != null) {
-						node = getNodeFromClosed(left);
-						costPos = map[left[0]][left[1]];
-						if (node.totalCost > this.totalCost + pathCost[costPos]) {
-							node.setTotalCost(this.totalCost + pathCost[costPos]);
-							node.setParent(this);
-						}
-					} else {
-						node = new Node(this, left[0], left[1], this.totalCost + pathCost[map[left[0]][left[1]]]);
-						openList.push(node);
-						createdList.push(node);
-					}
-
-				}
-
-
-				// leftTop = [rowAt - 1, colAt - 1];
-				// if (leftTop[0] >= 0 && leftTop[1] >= 0 && map[leftTop[0]][leftTop[1]] != obstacle) {
-				// 	if (getNodeFromClosed(leftTop) != null) {
-				// 		node = getNodeFromClosed(leftTop);
-				// 		costPos = map[leftTop[0]][leftTop[1]];
-				// 		if (node.totalCost > this.totalCost + costPos) {
-				// 			node.setTotalCost(this.totalCost + costPos);
-				// 			node.setParent(this);
-				// 		}
-				// 	} else {
-				// 		node = new Node(this, leftTop[0], leftTop[1], this.totalCost + pathCost[map[leftTop[0]][leftTop[1]]]);
-				// 		openList.push(node);
-				// 		createdList.push(node);
-				// 	}
-
-				// }
-
-				//can not use top, top is already defined as window class in JS
-				topNode = [rowAt - 1, colAt];
-				if (topNode[0] >= 0 && map[topNode[0]][topNode[1]] != obstacle) {
-					if (getNodeFromClosed(topNode) != null) {
-						node = getNodeFromClosed(topNode);
-						costPos = map[topNode[0]][topNode[1]];
-						if (node.totalCost > this.totalCost + pathCost[costPos]) {
-							node.setTotalCost(this.totalCost + pathCost[costPos]);
-							node.setParent(this);
-						}
-					} else {
-						node = new Node(this, topNode[0], topNode[1], this.totalCost + pathCost[map[topNode[0]][topNode[1]]]);
-						openList.push(node);
-						createdList.push(node);
-					}
-
-				}
-			}
-		}
-
-		function getNodeFromClosed(testNode) {
-			for (i = 0; i < createdList.length; i++) {
-				if (createdList[i].rowAt == testNode[0] && createdList[i].colAt == testNode[1]) return createdList[i];
-			}
-			return null;
-		}
-
-		var openList;
-		var closedList;
-		var createdList;
-		var startNode;
-		var searchNode;
-		var currentNode;
-
-		function run() {
-			startNode = getStartNode();
-			searchNode = startNode;
-			openList = [];
-			openList.push(startNode);
-			createdList = [];
-			createdList.push(startNode);
-			closedList = [];
-			iterationTime = 0;
-			//start iteration procedure
-			if (openList.length != 0) {
-				iteration();
-			}
-		}
-
-		function iteration() {
-			//remove highlight of currentNode
-			if (currentNode != null) document.getElementById(currentNode.rowAt + "_" + currentNode.colAt).style.border = "1px solid white";
-			currentNode = openList.pop();
-			//highlight currentNode
-			document.getElementById(currentNode.rowAt + "_" + currentNode.colAt).style.border = "1px solid red";
-			document.getElementById("iteration").innerText = "iteration:" + ++iterationTime;
-			if (currentNode.getMapValue() == goal) {
-				closedList.push(currentNode);
-				//find path through closedList
-				var node = closedList[closedList.length - 1]; //goal node
-				var path = new Array(node);
-				while (node.getMapValue != startNode.getMapValue) {
-					node = node.parent;
-					path.unshift(node);
-				}
-
-				for (i = path.length - 1; i > 0; i--) {
-					drawFinalPathLine(path[i], path[i].parent);
-					// console.log(path[i].rowAt + " " + path[i].colAt);
-				}
-
-				return;
-			} else setTimeout(() => {
-				currentNode.addNeightBor();
-				closedList.push(currentNode);
-				var i = 1;
-				for (; i < openList.length; i++) {
-					var k = i;
-					for (; k > 0; k--) {
-						if (parseInt(openList[k].totalCost) > parseInt(openList[k - 1].totalCost)) {
-							temp = openList[k];
-							openList[k] = openList[k - 1];
-							openList[k - 1] = temp;
-						}
-					}
-				}
-				iteration();
-			}, timeStep);
-
-		}
-
-		function getStartNode() {
-			for (i = 0; i < row; i++) {
-				for (j = 0; j < col; j++) {
-					if (map[i][j] == start)
-						return new Node(null, i, j, 0);
-				}
-			}
-		}
-	</script>
-</body>
-
+      socket.on('message2', (data) => {
+          document.querySelector('h1').innerHTML = data;
+          document.getElementById('spanWord').innerHTML = data
+          // if(data == 1){
+          //   document.getElementById('spanWord').innerHTML = 1
+          // }
+          // else if(data == 2){
+          //   document.getElementById('spanWord').innerHTML = 2
+          // }
+          // else if(data == 3){  
+          //   document.getElementById('spanWord').innerHTML = 3
+          // }
+          
+      })
+    </script>
+    
+  </body>
+  
 </html>
