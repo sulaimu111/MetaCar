@@ -128,7 +128,7 @@ router.get('/test', function(req, res, next) {
 
 // ======================post======================
 
-router.post('/posttest', function(req, res, next){
+router.post('/posttest1', function(req, res, next){
   var target = req.body;
   target = JSON.stringify(target);
   target = target.substring(2, target.length);
