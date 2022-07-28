@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/109/three.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.2.0/Tween.min.js"></script>
+    <!-- <script src="https://unpkg.com/three@0.125.2/examples/jsm/loaders/OBJLoader.js"></script> -->
+    <!-- <script type="module" src="/javascripts/GLTFLoader.js"></script> -->
+    <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/FontLoader.js"></script>
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script>
+    
+    <!-- <script src="/javascripts/move.js" charset="utf-8"></script> -->
+  </head>
+  <body>
+    <div id="stats"></div>
+    <div class="h1box">
+      <img id="place">
+      <h1 id="h1Text" style="display: none;"></h1>
+      <button id="park_btn" onclick="press()">go to the park</button>
+      <button id="park_btn2" onclick="press2()">11</button>
+      <button id="park_btn3" onclick="press3()">111</button>
+    </div>
+    <span id="spanWord" style="display: none;"></span>
+    <!-- <button type="button" onclick="run()">start</button> -->
+    <script src="/javascripts/dijkstra_search.js"></script>
+    <script src="/javascripts/init_object.js"></script>
+    <script src="/javascripts/story_image.js"></script>
+    <script src="/javascripts/move.js"></script>
+    <script>
+      const socket = io('http://140.125.32.138:3000')
+
+      socket.on('connection')
+
+      socket.on('message17', (data) => {
+          document.querySelector('h1').innerHTML = data;
+          document.getElementById('spanWord').innerHTML = data
+          // if(data == 1){
+          //   document.getElementById('spanWord').innerHTML = 1
+          // }
+          // else if(data == 2){
+          //   document.getElementById('spanWord').innerHTML = 2
+          // }
+          // else if(data == 3){  
+          //   document.getElementById('spanWord').innerHTML = 3
+          // }
+          
+      })
+    </script>
+    
+  </body>
+  
+</html>
