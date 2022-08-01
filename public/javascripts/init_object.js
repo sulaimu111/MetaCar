@@ -89,7 +89,7 @@ function initObject() {
       this.gripperR = new THREE.Mesh(gripperRGeo, gripperRMat)
       this.gripperR.position.set(3,-1,0.5)
   
-      // 將四隻腳組合為一個 group
+      // 將夾爪頭組合為一個 group
       this.clip = new THREE.Group()
       this.clip.add(this.gripperL)
       this.clip.add(this.gripperR)
@@ -97,7 +97,7 @@ function initObject() {
       this.clip.add(this.base4)
   
   
-      // 將頭、身體、腳組合為一個 group
+      // 將夾爪頭與夾爪身組合為一個 group
       this.gripper = new THREE.Group()
       this.gripper.add(this.clip)
       this.gripper.add(this.base1)
