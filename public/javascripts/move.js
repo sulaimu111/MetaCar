@@ -47,13 +47,13 @@ let road_path = [];
 let road_path_sec = [];
 let turn_path = [];
 let turn_path2 = [];
-let turn_right = [
+let turn_left = [
   [[1,0],[0,-1]],
   [[0,-1],[-1,0]],
   [[-1,0],[0,1]],
   [[0,1],[1,0]]
 ]
-let turn_left = [
+let turn_right = [
   [[1,0],[0,1]],
   [[0,1],[-1,0]],
   [[-1,0],[0,-1]],
@@ -696,20 +696,20 @@ function forward_place(){
         flag_step1 = true
         // flag_stop = false
       }
-      else if(gripperABody.position.z >= gripper_pos_z-4 && gripperBBody.position.z <= gripper_pos_z+4 && flag_step1){
+      else if(gripperABody.position.z >= gripper_pos_z-4 && gripperBBody.position.z <= gripper_pos_z+4 && flag_step1){ //張開夾爪
         // console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeee")
         gripperABody.position.z = gripperABody.position.z - 0.05
         gripperBBody.position.z = gripperBBody.position.z + 0.05
         gripperObj.gripperL.position.z = gripperObj.gripperL.position.z - 0.05
         gripperObj.gripperR.position.z = gripperObj.gripperR.position.z + 0.05
       }
-      else if(gripperABody.position.x >= gripper_pos_x-6 && gripperBBody.position.x >= gripper_pos_x-6 && flag_step1){
+      else if(gripperABody.position.x >= gripper_pos_x-6 && gripperBBody.position.x >= gripper_pos_x-6 && flag_step1){ //往前伸長
         // console.log("ffffffffffffffffffffffffffff")
         gripperABody.position.x = gripperABody.position.x - 0.05
         gripperBBody.position.x = gripperBBody.position.x - 0.05
         gripperTopBody.position.x = gripperTopBody.position.x - 0.05
         
-        if(gripperABody.position.x >= gripper_pos_x-5 && gripperBBody.position.x >= gripper_pos_x-5){
+        if(gripperABody.position.x >= gripper_pos_x-5 && gripperBBody.position.x >= gripper_pos_x-5){ //虛擬夾爪伸長
           gripperObj.clip.position.x = gripperObj.clip.position.x + 0.05
         }
         // gripperObj.gripperR.position.x = gripperObj.gripperR.position.x + 0.05
@@ -723,14 +723,14 @@ function forward_place(){
         flag_step2 = true
       }
     
-      if(gripperABody.position.z <= gripper_pos_z-2.5 && gripperBBody.position.z >= gripper_pos_z+2.5 && flag_step1 != true && flag_step2){
+      if(gripperABody.position.z <= gripper_pos_z-2.5 && gripperBBody.position.z >= gripper_pos_z+2.5 && flag_step1 != true && flag_step2){ //夾爪閉合
         // console.log("gggggggggggggggggggggggggggg")
         gripperABody.position.z = gripperABody.position.z + 0.05
         gripperBBody.position.z = gripperBBody.position.z - 0.05
         gripperObj.gripperL.position.z = gripperObj.gripperL.position.z + 0.05
         gripperObj.gripperR.position.z = gripperObj.gripperR.position.z - 0.05
       }
-      else if(gripperABody.position.y <= gripper_pos_y+2.5 && gripperBBody.position.y <= gripper_pos_y+2.5 && flag_step1 != true && flag_step2){
+      else if(gripperABody.position.y <= gripper_pos_y+2.5 && gripperBBody.position.y <= gripper_pos_y+2.5 && flag_step1 != true && flag_step2){ //夾爪抬高
         // console.log("gggggggggggggggggggggggggggg")
         gripperABody.position.y = gripperABody.position.y + 0.05
         gripperBBody.position.y = gripperBBody.position.y + 0.05
@@ -742,14 +742,14 @@ function forward_place(){
       //   gripperBBody.position.y = gripperBBody.position.y + 0.05
       //   // boxC1body.position.z = gripperABody.position.z
       // }
-      else if(gripperABody.position.x <= gripper_pos_x-3 && gripperBBody.position.x <= gripper_pos_x-3 && flag_step1 != true && flag_step2){
+      else if(gripperABody.position.x <= gripper_pos_x-3 && gripperBBody.position.x <= gripper_pos_x-3 && flag_step1 != true && flag_step2){ //往後收回
         // console.log("ffffffffffffffffffffffffffff")
         gripperABody.position.x = gripperABody.position.x + 0.05
         gripperBBody.position.x = gripperBBody.position.x + 0.05
         gripperTopBody.position.x = gripperTopBody.position.x + 0.05
         gripperObj.clip.position.x = gripperObj.clip.position.x - 0.05
       }
-      else if(metacarObj.position.z >= metacar_pos_z-14 && flag_step1 != true && flag_step2){
+      else if(metacarObj.position.z >= metacar_pos_z-14 && flag_step1 != true && flag_step2){ //機器人往右橫移
         metacarObj.position.z = metacarObj.position.z - 0.05
         gripperABody.position.z = gripperABody.position.z - 0.05
         gripperBBody.position.z = gripperBBody.position.z - 0.05
@@ -763,7 +763,7 @@ function forward_place(){
         // console.log("step1_finish")
       }
     
-      if(gripperABody.position.x >= gripper_pos_x-6 && gripperBBody.position.x >= gripper_pos_x-6 && flag_step1 != true && flag_step2 != true && flag_step3){
+      if(gripperABody.position.x >= gripper_pos_x-6 && gripperBBody.position.x >= gripper_pos_x-6 && flag_step1 != true && flag_step2 != true && flag_step3){ //伸長夾爪
         gripperABody.position.x = gripperABody.position.x - 0.05
         gripperBBody.position.x = gripperBBody.position.x - 0.05
         gripperTopBody.position.x = gripperTopBody.position.x - 0.05
@@ -771,7 +771,7 @@ function forward_place(){
         // console.log("gripperTopBody.position.z = " , gripperTopBody.position.z)
         // console.log("step2")
       }
-      else if(gripperABody.position.y >= gripper_pos_y && gripperBBody.position.y >= gripper_pos_y && flag_step1 != true && flag_step2 != true && flag_step3){
+      else if(gripperABody.position.y >= gripper_pos_y && gripperBBody.position.y >= gripper_pos_y && flag_step1 != true && flag_step2 != true && flag_step3){ //放下夾爪
         // console.log("gggggggggggggggggggggggggggg")
         gripperABody.position.y = gripperABody.position.y - 0.05
         gripperBBody.position.y = gripperBBody.position.y - 0.05
@@ -784,7 +784,7 @@ function forward_place(){
       //   flag_step3 = false
       // }
     
-      else if(gripperObj.clip.position.x >= 3 && flag_step1 != true && flag_step2 != true && flag_step3){
+      else if(gripperObj.clip.position.x >= 3 && flag_step1 != true && flag_step2 != true && flag_step3){ //將虛擬夾爪收回
         // console.log("gggggggggggggggggggggggggggg")
         // gripperABody.position.z = gripperABody.position.z - 0.05
         // gripperBBody.position.z = gripperBBody.position.z - 0.05
@@ -1411,13 +1411,14 @@ function move() {
       flag_tween2 = true
       run()
       // setTimeout("run()", 5000)
-      // console.log("path1 = ", path)
+      console.log("path1 = ", path)
       // console.log(map)
       if(path.length > 0){
         if(road_path.length < path.length){
           for(i=0; i<path.length; i++){
             road_path.push([path[i].colAt, path[i].rowAt])
           }
+          console.log(road_path)
         }
         else{
           flag_tween1 = false
@@ -1430,45 +1431,49 @@ function move() {
         for(j=0; j<road_path.length; j++){
           road_path_sec.push([road_path[j+1][0]-road_path[j][0], road_path[j+1][1]-road_path[j][1]])
         }
+        
       }
       else{
         flag_tween2 = false
         flag_tween3 = true
       }
+      console.log("road_path_sec = ", road_path_sec)
+      console.log("road_path_sec[0] = ", road_path_sec[0])
     }
     else if(flag_tween3){
       for(k=0; k<road_path_sec.length-1; k++){
-        if((JSON.stringify(turn_right[0][0]) === JSON.stringify(road_path_sec[k]) && JSON.stringify(turn_right[0][1]) === JSON.stringify(road_path_sec[k+1])) ||
-          (JSON.stringify(turn_right[1][0]) === JSON.stringify(road_path_sec[k]) && JSON.stringify(turn_right[1][1]) === JSON.stringify(road_path_sec[k+1])) ||
-          (JSON.stringify(turn_right[2][0]) === JSON.stringify(road_path_sec[k]) && JSON.stringify(turn_right[2][1]) === JSON.stringify(road_path_sec[k+1])) ||
-          (JSON.stringify(turn_right[3][0]) === JSON.stringify(road_path_sec[k]) && JSON.stringify(turn_right[3][1]) === JSON.stringify(road_path_sec[k+1]))){
-          // console.log(k + " : " + "turn left")
+        if((JSON.stringify(turn_left[0][0]) === JSON.stringify(road_path_sec[k]) && JSON.stringify(turn_left[0][1]) === JSON.stringify(road_path_sec[k+1])) ||
+          (JSON.stringify(turn_left[1][0]) === JSON.stringify(road_path_sec[k]) && JSON.stringify(turn_left[1][1]) === JSON.stringify(road_path_sec[k+1])) ||
+          (JSON.stringify(turn_left[2][0]) === JSON.stringify(road_path_sec[k]) && JSON.stringify(turn_left[2][1]) === JSON.stringify(road_path_sec[k+1])) ||
+          (JSON.stringify(turn_left[3][0]) === JSON.stringify(road_path_sec[k]) && JSON.stringify(turn_left[3][1]) === JSON.stringify(road_path_sec[k+1]))){
+          console.log(k + " : " + "turn left")
           turn_path.push(1)
         }
-        else if((JSON.stringify(turn_left[0][0]) === JSON.stringify(road_path_sec[k]) && JSON.stringify(turn_left[0][1]) === JSON.stringify(road_path_sec[k+1])) ||
-                (JSON.stringify(turn_left[1][0]) === JSON.stringify(road_path_sec[k]) && JSON.stringify(turn_left[1][1]) === JSON.stringify(road_path_sec[k+1])) ||
-                (JSON.stringify(turn_left[2][0]) === JSON.stringify(road_path_sec[k]) && JSON.stringify(turn_left[2][1]) === JSON.stringify(road_path_sec[k+1])) ||
-                (JSON.stringify(turn_left[3][0]) === JSON.stringify(road_path_sec[k]) && JSON.stringify(turn_left[3][1]) === JSON.stringify(road_path_sec[k+1]))){
-          // console.log(k + " : " + "turn right")
+        else if((JSON.stringify(turn_right[0][0]) === JSON.stringify(road_path_sec[k]) && JSON.stringify(turn_right[0][1]) === JSON.stringify(road_path_sec[k+1])) ||
+                (JSON.stringify(turn_right[1][0]) === JSON.stringify(road_path_sec[k]) && JSON.stringify(turn_right[1][1]) === JSON.stringify(road_path_sec[k+1])) ||
+                (JSON.stringify(turn_right[2][0]) === JSON.stringify(road_path_sec[k]) && JSON.stringify(turn_right[2][1]) === JSON.stringify(road_path_sec[k+1])) ||
+                (JSON.stringify(turn_right[3][0]) === JSON.stringify(road_path_sec[k]) && JSON.stringify(turn_right[3][1]) === JSON.stringify(road_path_sec[k+1]))){
+          console.log(k + " : " + "turn right")
           turn_path.push(-1)
         }
         else{
           // console.log(k + " : " + "keep")
         }
-      }
+
+      }console.log("turn_path = ", turn_path)
 
       if(flag_library || flag_school || flag_park){
         for(n=0; n<road_path_sec.length; n++){
         if(road_path_sec[n][0] != 0){
           if(road_path_sec[n][0] == 1){
-            // console.log(k + " : " + "+X")
-            if(turn_path2[turn_path2.length-1] != 0){
+            console.log(k + " : " + "+X")
+            if(turn_path2[turn_path2.length-1] != 0){ //判斷turn_path2是否有重複的動作
               turn_path2.push(0)
             }
           }
           else if(road_path_sec[n][0] == -1){
-            // console.log(k + " : " + "-X")
-            if(turn_path2[turn_path2.length-1] != 2){
+            console.log(k + " : " + "-X")
+            if(turn_path2[turn_path2.length-1] != 2){ //判斷turn_path2是否有重複的動作
               turn_path2.push(2)
             }
           }
@@ -1477,14 +1482,14 @@ function move() {
         }
         else if(road_path_sec[n][1] != 0){
           if(road_path_sec[n][1] == 1){
-            // console.log(k + " : " + "+Y")
-            if(turn_path2[turn_path2.length-1] != 3){
+            console.log(k + " : " + "+Z")
+            if(turn_path2[turn_path2.length-1] != 3){ //判斷turn_path2是否有重複的動作
               turn_path2.push(3)
             }
           }
           else if(road_path_sec[n][1] == -1){
-            // console.log(k + " : " + "-Y")
-            if(turn_path2[turn_path2.length-1] != 1){
+            console.log(k + " : " + "-Z")
+            if(turn_path2[turn_path2.length-1] != 1){ //判斷turn_path2是否有重複的動作
               turn_path2.push(1)
             }
           }
@@ -1494,7 +1499,7 @@ function move() {
       
 
 
-      // console.log(turn_path)
+      console.log("turn_path2 = ", turn_path2)
       flag_tween3 = false
       flag_tween4 = true
     }
@@ -1761,15 +1766,15 @@ window.addEventListener('resize', function(){
 })
 
 function press(){
-  document.getElementById("spanWord").innerHTML = 1
+  document.getElementById("spanWord").innerHTML = 3
 }
 
 function press2(){
-  document.getElementById("spanWord").innerHTML = 11
+  document.getElementById("spanWord").innerHTML = 31
 }
 
 function press3(){
-  document.getElementById("spanWord").innerHTML = 9111
+  document.getElementById("spanWord").innerHTML = 333
 }
 
 

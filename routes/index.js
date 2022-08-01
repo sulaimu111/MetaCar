@@ -94,35 +94,22 @@ router.get('/Metaverse_RoboMaster20', function(req, res, next){
   res.render('bot20', { title: 'RoboMaster20' });
 })
 
-router.get('/story', function(req, res, next) {
-  res.render('story', { title: 'Story' });
-});
+// router.get('/story', function(req, res, next) {
+//   res.render('story', { title: 'Story' });
+// });
 
-router.get('/metaverse', function(req, res, next) {
-  require('dns').reverse(req.connection.remoteAddress, function(err, domains) {
-    console.log(domains);
-});
-  res.render('metaverse', { title: 'metaverse' });
-});
-
-
-
-router.get('/test', function(req, res, next) {
-  res.render('bot2', { title: 'RoboMaster2' });
-});
+// router.get('/metaverse', function(req, res, next) {
+//   require('dns').reverse(req.connection.remoteAddress, function(err, domains) {
+//     console.log(domains);
+// });
+//   res.render('metaverse', { title: 'metaverse' });
+// });
 
 
-// router.get('/posttest', function(req, res, next){
-//   res.render('postTest', { title: 'postTest' });
-// })
 
-// router.post('/posttest', function(req, res, next){
-//   console.log(req.body);
-//   // res.json({"target":"ok"});
-//   res.end("nodejs_ok");
-//   // socket.emit('message', "noooo")
-// })
-
+// router.get('/test', function(req, res, next) {
+//   res.render('bot2', { title: 'RoboMaster2' });
+// });
 
 
 

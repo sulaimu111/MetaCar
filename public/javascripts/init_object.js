@@ -819,7 +819,7 @@ function initObject() {
     gripperA = new THREE.Mesh(gripperAGeo, gripperAMat);
     gripperA.castShadow = true
     // car.position.y = 10
-    // scene.add(gripperA);
+    scene.add(gripperA);
   
     const gripperA2Geo = new THREE.BoxGeometry(1, 4, 1);
     const gripperA2Mat = new THREE.MeshPhongMaterial({
@@ -829,7 +829,7 @@ function initObject() {
     gripperA2 = new THREE.Mesh(gripperA2Geo, gripperA2Mat);
     gripperA2.castShadow = true
     // car.position.y = 10
-    // scene.add(gripperA2);
+    scene.add(gripperA2);
   
     const gripperA3Geo = new THREE.BoxGeometry(1, 4, 1);
     const gripperA3Mat = new THREE.MeshPhongMaterial({
@@ -839,7 +839,7 @@ function initObject() {
     gripperA3 = new THREE.Mesh(gripperA3Geo, gripperA3Mat);
     gripperA3.castShadow = true
     // car.position.y = 10
-    // scene.add(gripperA3);
+    scene.add(gripperA3);
   
     const gripperA4Geo = new THREE.BoxGeometry(5, 5, 1);
     const gripperA4Mat = new THREE.MeshPhongMaterial({
@@ -849,7 +849,7 @@ function initObject() {
     gripperA4 = new THREE.Mesh(gripperA4Geo, gripperA4Mat);
     gripperA4.castShadow = true
     // car.position.y = 10
-    // scene.add(gripperA4);
+    scene.add(gripperA4);
   
     const gripperBGeo = new THREE.BoxGeometry(10, 1, 1);
     const gripperBMat = new THREE.MeshPhongMaterial({
@@ -859,7 +859,7 @@ function initObject() {
     gripperB = new THREE.Mesh(gripperBGeo, gripperBMat);
     gripperB.castShadow = true
     // car.position.y = 10
-    // scene.add(gripperB);
+    scene.add(gripperB);
   
     const gripperB2Geo = new THREE.BoxGeometry(1, 4, 1);
     const gripperB2Mat = new THREE.MeshPhongMaterial({
@@ -869,7 +869,7 @@ function initObject() {
     gripperB2 = new THREE.Mesh(gripperB2Geo, gripperB2Mat);
     gripperB2.castShadow = true
     // car.position.y = 10
-    // scene.add(gripperB2);
+    scene.add(gripperB2);
   
     const gripperB3Geo = new THREE.BoxGeometry(1, 4, 1);
     const gripperB3Mat = new THREE.MeshPhongMaterial({
@@ -879,7 +879,7 @@ function initObject() {
     gripperB3 = new THREE.Mesh(gripperB3Geo, gripperB3Mat);
     gripperB3.castShadow = true
     // car.position.y = 10
-    // scene.add(gripperB3);
+    scene.add(gripperB3);
   
     const gripperB4Geo = new THREE.BoxGeometry(5, 5, 1);
     const gripperB4Mat = new THREE.MeshPhongMaterial({
@@ -889,7 +889,7 @@ function initObject() {
     gripperB4 = new THREE.Mesh(gripperB4Geo, gripperB4Mat);
     gripperB4.castShadow = true
     // car.position.y = 10
-    // scene.add(gripperB4);
+    scene.add(gripperB4);
   
     const gripperTopGeo = new THREE.BoxGeometry(20, 1, 5);
     const gripperTopMat = new THREE.MeshPhongMaterial({
@@ -899,7 +899,7 @@ function initObject() {
     gripperTop = new THREE.Mesh(gripperTopGeo, gripperTopMat);
     gripperTop.castShadow = true
     // car.position.y = 10
-    // scene.add(gripperTop);
+    scene.add(gripperTop);
   
 
     //========================================================================box A網格========================================================================
